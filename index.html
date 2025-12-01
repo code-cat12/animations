@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animation Banners</title>
+    <!-- Load Tailwind CSS from CDN for instant styling --><script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Link to Inter font from Google Fonts (Universal) --><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    // Using Inter first, then falling back to the optimized system font stack (SF Pro, Segoe UI, etc.)
+                    fontFamily: {
+                        sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', '"Helvetica Neue"', 'Arial', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Ensures the body fills the entire viewport height and width */
+        html, body {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden; /* Prevents horizontal scroll on small screens */
+        }
+        /* Custom CSS for the three-stop gradient: lighter red -> lighter purple -> lighter blue */
+        .tri-gradient {
+            background: linear-gradient(to right, 
+                #ef4444 0%,         /* Lighter Red-500 */
+                #a78bfa 50%,         /* Lighter Purple-400 */
+                #60a5fa 100%         /* Lighter Blue-400 */
+            );
+        }
+
+        /* --- KINETIC HEADER STYLES --- */
+        #kinetic-welcome span {
+            display: inline-block; /* Essential for individual transforms */
+            transition: transform 0.15s ease-out; /* Smooth movement */
+            will-change: transform; /* Performance optimization */
+        }
+
+        /* --- SNOWFALL EFFECT STYLES --- */
+        
+        /* Keyframes for the falling animation */
+        @keyframes fall {
+            0% { top: -10vh; opacity: 0.8; }
+            100% { top: 100vh; opacity: 0; }
+        }
+
+        /* Keyframes for the spinning animation */
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Base style for a single snowflake */
+        .snowflake {
+            position: fixed;
+            color: #fff;
+            font-size: 1.5rem;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+            pointer-events: none; /* Allows clicks to pass through */
+            user-select: none;
+            z-index: 10; /* Below nav bar (z-50) but above content */
+        }
+    </style>
+</head>
+<!-- Applying the custom tri-gradient class for the body background --><body class="tri-gradient min-h-screen font-sans">
+
+    <!-- TOP NAVIGATION BAR (Fixed, Blackish Gray, 20% Transparent / 80% Opacity) -->
+    <nav class="fixed top-0 left-0 w-full z-50 bg-gray-900/80 backdrop-blur-sm shadow-xl">
+        <!-- Center aligns the content using justify-center -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-center items-center py-2">
+            
+            <!-- Centered Element: Snowflake Emoji and Brand Text -->
+            <div class="text-white text-base font-bold flex items-center">
+                <!-- Reduced emoji size to text-xl --><span class="text-xl mr-2">❄️</span>
+                <!-- Updated text from @IcyYT to @Icy -->
+                <a href="#" class="text-gray-300 hover:text-white transition duration-150 font-bold tracking-wider">@Icy</a>
+            </div>
+            
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT - Changed to flex-col to stack the hero and cards vertically -->
+    <main class="pt-20 pb-16 flex flex-col items-center justify-center min-h-screen px-4">
+        
+        <!-- NEW HERO SECTION: Interactive Welcome Title -->
+        <div class="text-center mb-16 max-w-4xl w-full">
+            <!-- Container for the kinetic title (text injected by JS) -->
+            <h1 id="kinetic-welcome" class="text-3xl sm:text-5xl font-extrabold text-white mt-2 leading-tight tracking-tight drop-shadow-lg">
+                <!-- Letters will be injected here -->
+            </h1>
+        </div>
+        <!-- END NEW HERO SECTION -->
+
+        <!-- Container for the two interactive cards/buttons --><div class="flex flex-col lg:flex-row gap-8 max-w-5xl w-full">
+            
+            <!-- Forsaken Animations Card (Vibrant Red to Black Gradient) -->
+            <a href="https://code-cat12.github.io/forsaken" class="flex-1 block 
+                transform hover:scale-[1.03] transition duration-300 ease-in-out 
+                bg-gradient-to-tr from-red-600 to-black rounded-xl overflow-hidden shadow-2xl 
+                hover:shadow-red-900/70 group border border-white/30 
+                focus:ring-4 focus:ring-white/50 focus:outline-none">
+
+                <!-- Banner Image (Height: h-64) --><img src="https://staticg.sportskeeda.com/editor/2025/11/471bd-17619648050568-1920.jpg" 
+                    alt="Forsaken Animation Banner"
+                    class="w-full h-64 object-cover group-hover:opacity-85 transition duration-300"
+                    onerror="this.onerror=null;this.src='https://placehold.co/768x432/8B0000/ffffff?text=Forsaken+Image+Fallback';">
+                
+                <div class="p-6 text-center">
+                    <p class="text-white text-3xl font-bold tracking-wide drop-shadow-lg mb-1">
+                        Forsaken Animations
+                    </p>
+                    <p class="text-gray-300 text-sm font-light">
+                        Explore high-intensity combat choreography and custom rigs.
+                    </p>
+                </div>
+            </a>
+
+            <!-- Icy Animations Card (Vibrant Blue to Purple Gradient) -->
+            <a href="https://code-cat12.github.io/icy/" class="flex-1 block 
+                transform hover:scale-[1.03] transition duration-300 ease-in-out 
+                bg-gradient-to-tr from-blue-500 to-purple-700 rounded-xl overflow-hidden shadow-2xl 
+                hover:shadow-blue-900/70 group border border-white/30
+                focus:ring-4 focus:ring-white/50 focus:outline-none">
+
+                <!-- Banner Image (Height: h-64) --><img src="https://tr.rbxcdn.com/180DAY-619c32f02048495af06eb6c9830fda6a/768/432/Image/Png/noFilter" 
+                    alt="Icy Animations Banner"
+                    class="w-full h-64 object-cover group-hover:opacity-85 transition duration-300"
+                    onerror="this.onerror=null;this.src='https://placehold.co/768x432/1E90FF/ffffff?text=Icy+Image+Fallback';">
+
+                <div class="p-6 text-center">
+                    <p class="text-white text-3xl font-bold tracking-wide drop-shadow-lg mb-1">
+                        Icy Animations
+                    </p>
+                    <p class="text-gray-300 text-sm font-light">
+                        View seamless, chilling effects and unique character movements.
+                    </p>
+                </div>
+            </a>
+        </div>
+    </main>
+
+    <script>
+        // --- KINETIC WELCOME HEADER JAVASCRIPT ---
+        function initKineticWelcome() {
+            const container = document.getElementById('kinetic-welcome');
+            if (!container) return;
+
+            const text = "Welcome";
+            const letters = [];
+
+            // 1. Split text into spans
+            text.split('').forEach(char => {
+                const span = document.createElement('span');
+                span.textContent = char === ' ' ? '\u00A0' : char; // Use non-breaking space for actual spaces
+                
+                // Apply gradient colors to the letter span
+                span.classList.add('bg-clip-text', 'text-transparent', 'bg-gradient-to-r', 'from-white', 'to-gray-300');
+
+                container.appendChild(span);
+                letters.push(span);
+            });
+
+            // 2. Mouse move handler
+            const repulsionStrength = 25; // Reduced from 50 for less movement
+            const repulsionRadius = 75;  // Reduced from 100 for a tighter interaction area
+
+            document.addEventListener('mousemove', (e) => {
+                letters.forEach(span => {
+                    // Get the letter's bounding box and center coordinates
+                    const rect = span.getBoundingClientRect();
+                    const letterX = rect.left + rect.width / 2;
+                    const letterY = rect.top + rect.height / 2;
+
+                    // Calculate distance from mouse to letter's center
+                    const dx = e.clientX - letterX;
+                    const dy = e.clientY - letterY;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    let translateY = 0;
+
+                    if (distance < repulsionRadius) {
+                        // Calculate the "repulsion" factor (0 to 1)
+                        const repulsionFactor = 1 - (distance / repulsionRadius);
+                        
+                        // Calculate vertical movement:
+                        // If mouse is above the letter (dy is negative), move letter down (positive translateY)
+                        // If mouse is below the letter (dy is positive), move letter up (negative translateY)
+                        const direction = dy > 0 ? -1 : 1;
+                        
+                        // We scale the repulsion strength based on the proximity and the direction
+                        // The effect is to push the letter away from the mouse's Y-position.
+                        translateY = direction * repulsionStrength * repulsionFactor;
+                    }
+                    
+                    // Apply the transform
+                    span.style.transform = `translateY(${translateY}px)`;
+                });
+            });
+        }
+        
+        // --- SNOWFALL EFFECT JAVASCRIPT ---
+        const initialFlakeCount = 25; 
+        
+        function createSnowflake(isInitial = false) {
+            const snowflake = document.createElement('span');
+            snowflake.classList.add('snowflake');
+            snowflake.innerHTML = '❄️';
+            
+            snowflake.style.left = Math.random() * 100 + 'vw';
+            snowflake.style.fontSize = (Math.random() * 0.8 + 1.2) + 'rem'; 
+            
+            const fallDuration = (Math.random() * 10 + 5).toFixed(2);
+            const spinDuration = (Math.random() * 20 + 10).toFixed(2);
+            
+            let delay = (Math.random() * 5).toFixed(2); 
+
+            if (isInitial) {
+                const maxFallDuration = 15;
+                delay = -(Math.random() * maxFallDuration).toFixed(2);
+            }
+            
+            snowflake.style.animation = 
+                `fall ${fallDuration}s linear infinite, 
+                 spin ${spinDuration}s linear infinite`;
+            
+            snowflake.style.animationDelay = `${delay}s`;
+            
+            document.body.appendChild(snowflake);
+        }
+
+        function initSnowfall() {
+            for (let i = 0; i < initialFlakeCount; i++) {
+                createSnowflake(true); 
+            }
+        }
+
+        function startContinuousSnow() {
+            setInterval(() => createSnowflake(false), 1000); 
+        }
+
+        // Start all interactions when the window loads
+        window.onload = function () {
+            initKineticWelcome();
+            initSnowfall();
+            startContinuousSnow();
+        };
+    </script>
+</body>
+</html>
