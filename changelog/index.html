@@ -7,17 +7,78 @@
     <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Firebase Imports -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, setDoc, deleteDoc, onSnapshot, collection, query, orderBy, arrayUnion, arrayRemove, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+    <!-- Custom Tailwind Configuration for Colors and Animations -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'deep-blue': '#1e3a8a', // A nice dark blue for the main theme
+                        'deep-red': '#991b1b', // A subtle deep red for danger
+                    },
+                    keyframes: {
+                        'fade-in-down': {
+                            '0%': { opacity: '0', transform: 'translateY(-10px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        'fade-out-up': {
+                            '0%': { opacity: '1', transform: 'translateY(0)' },
+                            '100%': { opacity: '0', transform: 'translateY(-10px)' },
+                        }
+                    },
+                    animation: {
+                        'fade-in-down': 'fade-in-down 0.3s ease-out',
+                        'fade-out-up': 'fade-out-up 0.5s ease-out forwards',
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- --- CONFIG LOADER & FIREBASE IMPORTS (FIXED FOR GITHUB PAGES) --- -->
+    <script>
+        // Check if environment variables exist (Canvas environment)
+        if (typeof __firebase_config === 'undefined') {
+            // If they don't exist (GitHub Pages/Static Host), load the config manually
+            console.warn("Canvas environment variables not found. Attempting to load firebase-config.js for self-hosted environment.");
+            const script = document.createElement('script');
+            script.src = 'firebase-config.js'; // User must create this file
+            document.head.appendChild(script);
+        }
+    </script>
 
-        // Global variables provided by the environment
+    <script type="module">
+        // Standard Firebase CDN imports (using shorter path for stability)
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc, deleteDoc, onSnapshot, collection, query, arrayUnion, arrayRemove, getDocs } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore.js";
+        import { setLogLevel } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore.js";
+
+        setLogLevel('error'); // Set to 'error' to suppress verbose logs unless needed for debugging
+
+        // Global variables provided by the environment, with fallbacks for static hosting
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
+        
+        // Use environment config if available, otherwise use the config loaded from firebase-config.js (via the script tag above)
+        const firebaseConfig = typeof __firebase_config !== 'undefined' 
+            ? JSON.parse(__firebase_config) 
+            : (typeof window.userFirebaseConfig !== 'undefined' ? window.userFirebaseConfig : {});
+
         const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
         
+        // Check if configuration is present before initialization
+        if (Object.keys(firebaseConfig).length === 0) {
+            console.error("Firebase configuration is missing.");
+            document.addEventListener('DOMContentLoaded', () => {
+                const container = document.getElementById('changelog-timeline') || document.body;
+                container.innerHTML = `<p class="text-center text-deep-red mt-10 p-4 border border-red-300 bg-red-50 rounded-lg">
+                    CRITICAL ERROR: Firebase configuration is missing.
+                </p>`;
+            });
+            // Don't throw, let the rest of the file run but with errors logged.
+        }
+
+
         // --- Firebase Setup ---
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
@@ -49,6 +110,8 @@
                 }
             } catch (error) {
                 console.error("Firebase Auth Error:", error);
+                // Display error to the user if auth fails
+                alertMessage(`Failed to authenticate: ${error.message}. Check your console and Firebase security rules.`, "bg-red-100 border-red-400 text-red-700");
             }
         }
         
@@ -100,7 +163,8 @@
         function updateDateTimeInput() {
             const todayDateTimeString = getTodayDateTimeString();
             newDateInput.value = todayDateTimeString;
-            newDateInput.max = todayDateTimeString;
+            // Max is set to now to prevent future dates, but the input is now UN-READONLY
+            newDateInput.max = todayDateTimeString; 
         }
 
         updateDateTimeInput();
@@ -135,7 +199,7 @@
             disableEditorButton.addEventListener('click', disableEditorMode);
         }
 
-        // --- Utility to display a temporary message/alert (UPDATED for alignment) ---
+        // --- Utility to display a temporary message/alert ---
         function alertMessage(message, classes) {
             const container = document.getElementById('alert-container');
             
@@ -280,7 +344,7 @@
 
             } catch (error) {
                 console.error("Error creating new entry: ", error);
-                alertMessage("Failed to create new version entry.", "bg-red-100 border-red-400 text-red-700");
+                alertMessage("Failed to create new version entry. See console for details.", "bg-red-100 border-red-400 text-red-700");
             }
         });
 
@@ -320,7 +384,7 @@
 
             } catch (error) {
                 console.error("Error submitting entry: ", error);
-                alertMessage("Failed to save entry.", "bg-red-100 border-red-400 text-red-700");
+                alertMessage("Failed to save entry. See console for details.", "bg-red-100 border-red-400 text-red-700");
             }
         });
         
@@ -344,7 +408,7 @@
                     alertMessage(`Version ${getDisplayVersion(versionId)} deleted successfully.`, "bg-green-100 border-green-400 text-green-700");
                 } catch (error) {
                     console.error("Error deleting document: ", error);
-                    alertMessage("Failed to delete entry.", "bg-red-100 border-red-400 text-red-700");
+                    alertMessage("Failed to delete entry. See console for details.", "bg-red-100 border-red-400 text-red-700");
                 }
             } else if (versionId && itemValue) {
                 // Delete a specific change item
@@ -364,7 +428,7 @@
                     alertMessage("Change item deleted successfully.", "bg-green-100 border-green-400 text-green-700");
                 } catch (error) {
                     console.error("Error deleting feature: ", error);
-                    alertMessage("Failed to delete feature.", "bg-red-100 border-red-400 text-red-700");
+                    alertMessage("Failed to delete feature. See console for details.", "bg-red-100 border-red-400 text-red-700");
                 }
             }
             // Reset selectors after action
@@ -400,7 +464,7 @@
             deleteAllDataButton.addEventListener('click', async () => {
                 if (!isEditorMode) return alertMessage("Editor access required to delete.", "bg-red-100 border-red-400 text-red-700");
 
-                const confirmAll = await confirmAction("<p class='text-lg font-bold'>DANGER ZONE ACTIVATED</p>Are you absolutely sure you want to <strong>PERMANENTLY DELETE ALL</strong> changelog data? This will clear the entire history. This is <strong>IRREVERSIBLE</strong>.");
+                const confirmAll = await confirmAction("<p class='text-lg font-bold text-deep-red'>DANGER ZONE ACTIVATED</p>Are you absolutely sure you want to <strong>PERMANENTLY DELETE ALL</strong> changelog data? This will clear the entire history. This is <strong>IRREVERSIBLE</strong>.");
 
                 if (confirmAll) {
                     try {
@@ -425,7 +489,7 @@
 
                     } catch (error) {
                         console.error("Error deleting all documents: ", error);
-                        alertMessage("Failed to delete all data.", "bg-red-100 border-red-400 text-red-700");
+                        alertMessage("Failed to delete all data. See console for details.", "bg-red-100 border-red-400 text-red-700");
                     }
                 }
             });
@@ -460,7 +524,7 @@
             const deleteVersionOption = document.createElement('option');
             deleteVersionOption.value = 'delete-entire-version';
             deleteVersionOption.textContent = `[VERSION] Delete Entire Version ${selectedVersion.version}`;
-            deleteVersionOption.classList.add('font-bold', 'text-red-600');
+            deleteVersionOption.classList.add('font-bold', 'text-deep-red');
             itemSelectForDeletion.appendChild(deleteVersionOption);
 
             // 2. Add separator
@@ -519,8 +583,15 @@
 
         // --- Real-time Listener and Renderer ---
         function listenToChangelogs() {
-            const q = query(collection(db, CHANGELOG_COLLECTION_PATH), orderBy("timestamp", "desc"));
+            // Removed orderBy to prevent mandatory composite index creation errors
+            const q = query(collection(db, CHANGELOG_COLLECTION_PATH)); 
             
+            // Guard clause to prevent listening before Firebase is initialized
+            if (!db) {
+                console.error("Firestore not initialized.");
+                return;
+            }
+
             onSnapshot(q, (snapshot) => {
                 const fetchedData = [];
                 snapshot.forEach((doc) => {
@@ -533,6 +604,9 @@
                     fetchedData.push({ id: doc.id, ...data });
                 });
                 
+                // --- CLIENT-SIDE SORTING (by timestamp descending) ---
+                fetchedData.sort((a, b) => b.timestamp - a.timestamp);
+                
                 changelogData = fetchedData; // Update global state
                 renderChangelogs(changelogData);
 
@@ -543,16 +617,16 @@
 
             }, (error) => {
                 console.error("Error listening to changelogs:", error);
-                changelogContainer.innerHTML = `<p class="text-center text-red-500">Failed to load changelog data.</p>`;
+                changelogContainer.innerHTML = `<p class="text-center text-red-500">Failed to load changelog data. Check console for Firebase errors.</p>`;
             });
         }
 
-        // Render the Changelog UI (NO INLINE DELETE BUTTONS HERE)
+        // Render the Changelog UI 
         function renderChangelogs(changelogs) {
             changelogContainer.innerHTML = '';
             
             if (changelogs.length === 0) {
-                changelogContainer.innerHTML = `<p class="text-center text-slate-500 mt-10">No changelog entries found.</p>`;
+                changelogContainer.innerHTML = `<p class="text-center text-slate-500 mt-10">No changelog entries found. Use the Editor Mode to add your first version!</p>`;
                 return;
             }
 
@@ -594,377 +668,217 @@
 
 
                 const logHtml = `
-                    <div class="changelog-card bg-white rounded-xl p-6 md:p-8 shadow-xl border-t-4 ${borderColor}">
-                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b pb-3 mb-4">
-                            <div class="flex items-center">
-                                <h2 class="text-3xl font-bold text-slate-800">Version ${log.version}</h2>
-                                ${statusBadge} <!-- Display the status badge -->
-                            </div>
-                            <span class="text-sm font-medium text-slate-500 mt-2 sm:mt-0">Released: ${releaseDateTime}</span>
+                    <div class="changelog-card bg-white rounded-xl p-6 md:p-8 shadow-xl border-t-8 ${borderColor} relative">
+                        <!-- Header & Date -->
+                        <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-4 pb-4 border-b border-gray-100">
+                            <h2 class="text-3xl font-extrabold text-gray-900 flex items-center mb-2 md:mb-0">
+                                Version ${log.version}
+                                ${statusBadge}
+                            </h2>
+                            <p class="text-sm text-gray-500 font-medium">
+                                <time datetime="${log.date}">${releaseDateTime}</time>
+                            </p>
                         </div>
                         
-                        <!-- Separated change bubbles -->
-                        <div class="space-y-3">
+                        <!-- Change Items List -->
+                        <ul class="space-y-3">
                             ${items.map(item => {
-                                let icon = '&#10003;'; // Checkmark
-                                let iconColor = 'text-green-600';
-                                let tagClasses = 'bg-green-100 text-green-700';
+                                let icon = '';
+                                let itemClasses = 'text-gray-700';
                                 
-                                if (item.category === 'NEW' || item.category === 'FIXED') {
-                                    icon = '&#10003;'; 
-                                    if (item.category === 'FIXED') {
-                                        iconColor = 'text-amber-600'; 
-                                        tagClasses = 'bg-amber-100 text-amber-700';
-                                    } else {
-                                        iconColor = 'text-green-600'; 
-                                        tagClasses = 'bg-green-100 text-green-700';
-                                    }
-                                } else if (item.category === 'REMOVED' || item.category === 'FIXING') {
-                                    icon = '&#10006;'; 
-                                    if (item.category === 'REMOVED') {
-                                        iconColor = 'text-red-500'; 
-                                        tagClasses = 'bg-red-100 text-red-700';
-                                    } else { // FIXING
-                                        iconColor = 'text-cyan-600'; 
-                                        tagClasses = 'bg-cyan-100 text-cyan-700'; 
-                                    }
+                                // Assign icons and classes based on category
+                                if (item.category === 'NEW') {
+                                    // Plus icon
+                                    icon = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500 flex-shrink-0 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`;
+                                    itemClasses = 'text-green-700 font-medium';
+                                } else if (item.category === 'FIXED') {
+                                    // Checkmark in circle icon
+                                    icon = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-amber-500 flex-shrink-0 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`;
+                                    itemClasses = 'text-amber-700';
+                                } else if (item.category === 'REMOVED') {
+                                    // X in circle icon
+                                    icon = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-500 flex-shrink-0 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`;
+                                    itemClasses = 'text-red-700 line-through opacity-80';
+                                } else if (item.category === 'FIXING') {
+                                    // Lightning bolt icon (in progress/issue)
+                                    icon = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-cyan-500 flex-shrink-0 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>`;
+                                    itemClasses = 'text-cyan-700 italic';
+                                } else {
+                                    icon = `<span class="text-gray-400 text-lg mr-3 flex-shrink-0">•</span>`;
                                 }
-
+                                
                                 return `
-                                    <!-- Change bubble container -->
-                                    <div class="p-3 bg-gray-50 rounded-lg shadow-sm border border-gray-100">
-                                        <div class="flex items-start justify-between">
-                                            <div class="flex items-start w-full">
-                                                <span class="${iconColor} font-extrabold mr-3 mt-0.5 text-lg leading-none flex-shrink-0">${icon}</span>
-                                                
-                                                <div class="flex flex-col md:flex-row md:items-center w-full min-w-0">
-                                                    <span class="px-3 py-1 text-xs font-bold rounded-full ${tagClasses} flex-shrink-0 md:mr-4 mb-2 md:mb-0 shadow-sm uppercase">${item.category}</span>
-                                                    
-                                                    <div class="min-w-0 flex-grow">
-                                                        <p class="font-semibold text-slate-700 leading-snug break-words">
-                                                            ${item.description}
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <!-- Deleted buttons removed from here -->
+                                    <li class="flex items-start p-3 bg-gray-50 rounded-lg shadow-sm hover:bg-gray-100 transition-colors duration-150">
+                                        ${icon}
+                                        <div class="flex-1 ${itemClasses} text-sm">
+                                            <span class="font-semibold text-xs uppercase mr-2 text-gray-500">${item.category}:</span> ${item.description}
                                         </div>
-                                    </div>
+                                    </li>
                                 `;
                             }).join('')}
-                        </div>
+                        </ul>
                     </div>
                 `;
-                changelogContainer.insertAdjacentHTML('beforeend', logHtml);
+                
+                const wrapper = document.createElement('div');
+                wrapper.className = 'w-full mb-8 relative';
+                wrapper.innerHTML = logHtml;
+                changelogContainer.appendChild(wrapper);
             });
         }
     </script>
-
-    <!-- Custom Tailwind Configuration and Styles -->
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'icy-blue': '#E0F7FA', 
-                        'deep-blue': '#4FC3F7', 
-                        'slate-cool': '#607D8B', 
-                        'indigo-dark': '#303F9F',
-                    },
-                    keyframes: {
-                        fadeInDown: {
-                            '0%': { opacity: '0', transform: 'translateY(-10px)' },
-                            '100%': { opacity: '1', transform: 'translateY(0)' },
-                        },
-                        // Custom keyframe for fade out and move up
-                        fadeOutUp: { 
-                            '0%': { opacity: '1', transform: 'translateY(0)' },
-                            '100%': { opacity: '0', transform: 'translateY(-20px)' },
-                        }
-                    },
-                    animation: {
-                        'fade-in-down': 'fadeInDown 0.5s ease-out',
-                        'fade-out-up': 'fadeOutUp 0.5s ease-out forwards', // 'forwards' keeps the end state (opacity: 0)
-                    }
-                },
-                fontFamily: {
-                    sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', 'sans-serif'],
-                },
-            }
-        }
-    </script>
-    <style>
-        html {
-            scroll-behavior: smooth;
-        }
-        body {
-            background: linear-gradient(to bottom right, #1976D2, #42A5F5, #90CAF9); 
-        }
-        .changelog-card {
-            transition: all 0.3s ease;
-        }
-        .changelog-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-        }
-        /* --- Alert Container Styling for fixed, top-center positioning --- */
-        #alert-container {
-            position: fixed;
-            top: 20px; 
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 1000;
-            width: 90%; 
-            max-width: 500px; 
-        }
-    </style>
 </head>
-<body class="min-h-screen text-slate-cool font-sans p-4 sm:p-8">
+<body class="bg-gray-100 font-sans antialiased text-gray-800">
 
-    <!-- Confirmation Modal (Custom UI replacement for window.confirm) -->
-    <div id="confirmation-modal" class="hidden fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center transition-opacity duration-300">
-        <div class="bg-white rounded-xl shadow-2xl p-6 w-11/12 max-w-md animate-fade-in-down">
-            <h4 class="text-xl font-bold text-red-600 mb-4 border-b pb-2">Confirm Deletion</h4>
-            <p id="modal-message" class="text-slate-700 mb-6 font-semibold"></p>
+    <div class="max-w-4xl mx-auto p-4 sm:p-6 lg:p-8">
+        
+        <!-- Global Alert Container (Fixed Position) -->
+        <div id="alert-container" class="fixed top-4 right-4 z-50 max-w-sm w-full space-y-2">
+            <!-- Alerts will be injected here -->
+        </div>
+
+        <!-- Header -->
+        <header class="text-center py-6">
+            <h1 class="text-5xl font-extrabold text-deep-blue tracking-tight">
+                Icy Change Log
+            </h1>
+            <p class="mt-2 text-lg text-gray-500">Track all the latest updates, fixes, and removals.</p>
+        </header>
+
+        <!-- Editor Login Area -->
+        <div id="editor-login" class="mb-8 p-6 bg-white shadow-lg rounded-xl flex flex-col md:flex-row items-center justify-between">
+            <h2 class="text-xl font-semibold text-gray-700 mb-3 md:mb-0">Content Management System (CMS)</h2>
+            <div class="flex w-full md:w-auto space-x-2">
+                <input type="password" id="editor-password" placeholder="Enter Editor Password" class="flex-grow p-2 border border-gray-300 rounded-lg focus:ring-deep-blue focus:border-deep-blue">
+                <button id="toggle-editor-btn" class="px-4 py-2 bg-deep-blue text-white font-semibold rounded-lg shadow-md hover:bg-deep-blue/90 transition duration-150">
+                    Enable Editor
+                </button>
+            </div>
+        </div>
+
+        <!-- Management Area (Hidden until logged in) -->
+        <div id="management-area" class="hidden mb-12 p-6 bg-white shadow-2xl rounded-xl border-t-4 border-deep-blue">
+            <div class="flex justify-between items-center mb-6 border-b pb-3">
+                <h2 class="text-2xl font-bold text-deep-blue">Changelog Management Panel</h2>
+                <button id="disable-editor-btn" class="px-3 py-1 bg-gray-600 text-white text-sm rounded-lg hover:bg-gray-700 transition duration-150">
+                    Disable Editor Mode
+                </button>
+            </div>
+
+            <!-- Tabs for Forms -->
+            <div x-data="{ activeTab: 'new' }" class="space-y-6">
+                
+                <!-- Tab Headers -->
+                <div class="flex border-b">
+                    <button @click="activeTab = 'new'" :class="{'border-deep-blue text-deep-blue': activeTab === 'new', 'border-transparent text-gray-500 hover:text-gray-700': activeTab !== 'new'}" class="py-2 px-4 text-sm font-medium border-b-2 transition duration-150">
+                        1. New Version
+                    </button>
+                    <button @click="activeTab = 'existing'" :class="{'border-deep-blue text-deep-blue': activeTab === 'existing', 'border-transparent text-gray-500 hover:text-gray-700': activeTab !== 'existing'}" class="py-2 px-4 text-sm font-medium border-b-2 transition duration-150">
+                        2. Add to Existing
+                    </button>
+                    <button @click="activeTab = 'delete'" :class="{'border-deep-red text-deep-red': activeTab === 'delete', 'border-transparent text-gray-500 hover:text-gray-700': activeTab !== 'delete'}" class="py-2 px-4 text-sm font-medium border-b-2 transition duration-150">
+                        3. Delete Entries
+                    </button>
+                </div>
+                
+                <!-- Tab Content: New Version -->
+                <div x-show="activeTab === 'new'" id="new-version-form-content">
+                    <form id="new-version-form" class="space-y-4 p-4 border rounded-lg bg-gray-50">
+                        <p class="text-xs text-gray-600">
+                            <strong>Format:</strong> Start each line with a tag: <code class="bg-yellow-100 px-1 rounded">[NEW]</code>, <code class="bg-yellow-100 px-1 rounded">[FIXED]</code>, <code class="bg-yellow-100 px-1 rounded">[FIXING]</code>, or <code class="bg-yellow-100 px-1 rounded">[REMOVED]</code>.
+                        </p>
+                        <div class="flex space-x-4">
+                            <input type="text" id="new-version" placeholder="Version (e.g., 1.0.0)" required class="flex-1 p-2 border border-gray-300 rounded-lg focus:ring-deep-blue focus:border-deep-blue">
+                            
+                            <select id="new-release-status" required class="p-2 border border-gray-300 rounded-lg focus:ring-deep-blue focus:border-deep-blue">
+                                <option value="RELEASE">RELEASE</option>
+                                <option value="BETA">BETA</option>
+                                <option value="ALPHA">ALPHA</option>
+                            </select>
+
+                            <input type="datetime-local" id="new-date" required class="p-2 border border-gray-300 rounded-lg focus:ring-deep-blue focus:border-deep-blue">
+                        </div>
+                        
+                        <textarea id="feature-description-new" rows="5" placeholder="Enter one change per line, starting with a tag: e.g., [NEW] Added dark mode feature" required class="w-full p-2 border border-gray-300 rounded-lg focus:ring-deep-blue focus:border-deep-blue"></textarea>
+                        
+                        <button type="submit" class="w-full px-4 py-2 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 transition duration-150">
+                            Create New Version
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Tab Content: Add to Existing -->
+                <div x-show="activeTab === 'existing'" id="existing-version-form-content">
+                    <form id="existing-version-form" class="space-y-4 p-4 border rounded-lg bg-gray-50">
+                        <select id="existing-version-select" class="w-full p-2 border border-gray-300 rounded-lg focus:ring-deep-blue focus:border-deep-blue">
+                            <option value="">-- Select Existing Version --</option>
+                        </select>
+                        <textarea id="feature-description-existing" rows="5" placeholder="Enter new changes for the selected version (one per line, with tags)" required class="w-full p-2 border border-gray-300 rounded-lg focus:ring-deep-blue focus:border-deep-blue"></textarea>
+                        
+                        <button type="submit" class="w-full px-4 py-2 bg-amber-600 text-white font-semibold rounded-lg shadow-md hover:bg-amber-700 transition duration-150">
+                            Add Changes to Selected Version
+                        </button>
+                    </form>
+                </div>
+                
+                <!-- Tab Content: Delete Entries -->
+                <div x-show="activeTab === 'delete'" id="delete-form-content">
+                    <div class="space-y-4 p-4 border border-deep-red rounded-lg bg-red-50">
+                        <h3 class="text-lg font-semibold text-deep-red">Delete Specific Item or Version</h3>
+                        
+                        <div class="flex space-x-4">
+                            <select id="version-select-for-deletion" class="flex-1 p-2 border border-gray-300 rounded-lg focus:ring-deep-red focus:border-deep-red bg-gray-100">
+                                <option value="">Select Version</option>
+                            </select>
+                            
+                            <select id="item-select-for-deletion" disabled class="flex-1 p-2 border border-gray-300 rounded-lg focus:ring-deep-red focus:border-deep-red bg-gray-100">
+                                <option value="">Select an Item or Version Deletion Option</option>
+                            </select>
+                        </div>
+                        
+                        <button id="delete-selected-btn" disabled class="w-full px-4 py-2 bg-deep-red text-white font-semibold rounded-lg shadow-md hover:bg-deep-red/90 transition duration-150">
+                            Delete Selected Item/Version
+                        </button>
+                        
+                        <div class="pt-4 border-t border-red-300">
+                             <h3 class="text-lg font-semibold text-deep-red mb-2">Extreme Danger Zone</h3>
+                             <button id="delete-all-data-btn" class="w-full px-4 py-2 bg-red-900 text-white font-semibold rounded-lg shadow-md hover:bg-red-800 transition duration-150">
+                                 !!! DELETE ALL CHANGELOG DATA !!!
+                             </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        
+        <!-- Changelog Timeline Section -->
+        <section class="mt-12">
+            <h2 class="text-3xl font-bold text-gray-700 mb-6 border-b pb-2">Recent Updates</h2>
+            <div id="changelog-timeline" class="space-y-12">
+                <!-- Changelog cards will be rendered here by JavaScript -->
+                <p class="text-center text-gray-500">Loading changelogs...</p>
+            </div>
+        </section>
+
+        <!-- Tailwind alpine.js for simple tab switching -->
+        <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    </div>
+    
+    <!-- Custom Confirmation Modal -->
+    <div id="confirmation-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl p-6 shadow-2xl max-w-sm w-full">
+            <h3 class="text-xl font-bold text-gray-800 mb-4">Confirm Action</h3>
+            <p id="modal-message" class="text-gray-600 mb-6"></p>
             <div class="flex justify-end space-x-3">
-                <button id="confirm-no" class="px-4 py-2 bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold rounded-lg transition duration-150">
+                <button id="confirm-no" class="px-4 py-2 bg-gray-200 text-gray-700 font-medium rounded-lg hover:bg-gray-300 transition duration-150">
                     Cancel
                 </button>
-                <button id="confirm-yes" class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white font-semibold rounded-lg transition duration-150">
+                <button id="confirm-yes" class="px-4 py-2 bg-deep-red text-white font-medium rounded-lg hover:bg-deep-red/90 transition duration-150">
                     Confirm Delete
                 </button>
             </div>
         </div>
-    </div>
-
-
-    <!-- Alert Container (Fixed, Top-Center) -->
-    <div id="alert-container">
-        <!-- Alerts will appear here -->
-    </div>
-
-
-    <!-- Main Content Container -->
-    <div class="max-w-4xl mx-auto">
-
-        <!-- Header -->
-        <header class="text-center mb-12 py-8 bg-white/70 backdrop-blur-sm rounded-xl shadow-lg">
-            <h1 class="text-3xl sm:text-5xl font-extrabold text-deep-blue tracking-tighter">
-                Icy Change Log
-            </h1>
-            <p class="mt-4 text-lg text-slate-cool/80">
-                Tracking all the cool updates and fixes.
-            </p>
-        </header>
-
-        <!-- Editor Login Area (Always visible) -->
-        <div id="editor-login" class="mb-8 p-4 bg-white/60 backdrop-blur-sm rounded-xl shadow-md flex flex-col sm:flex-row items-center justify-between space-y-3 sm:space-y-0 sm:space-x-4">
-            <label for="editor-password" class="text-sm font-medium text-slate-700 flex-shrink-0">Editor Password:</label>
-            <input type="password" id="editor-password" placeholder="Enter password to enable editor mode" class="flex-grow p-2 border border-blue-200 rounded-md focus:ring-blue-500 focus:border-blue-500">
-            <button id="toggle-editor-btn" class="w-full sm:w-auto px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-lg shadow-md transition duration-150">
-                Enable Editor
-            </button>
-        </div>
-
-        <!-- Alert Container Placeholder (The actual alert container is fixed at the top) -->
-        <!-- The alert-container div above is where the floating message will appear -->
-
-        <!-- Management Area (Hidden until unlocked) -->
-        <section id="management-area" class="hidden space-y-6 mb-12 p-6 bg-white/90 backdrop-blur-sm rounded-xl shadow-2xl border-4 border-dashed border-blue-300">
-            
-            <div class="flex justify-between items-center border-b pb-2">
-                <h3 class="text-2xl font-bold text-blue-700">Change Log Management</h3>
-                <!-- Disable Editor Mode Button -->
-                <button id="disable-editor-btn" class="px-3 py-1 bg-slate-500 hover:bg-slate-600 text-white text-sm font-semibold rounded-lg shadow-md transition duration-150">
-                    Disable Editor Mode
-                </button>
-            </div>
-            
-            <!-- Tag Guide Bubble - UPDATED PLACEHOLDER TEXT -->
-            <div class="p-4 rounded-xl bg-blue-100 border border-blue-300 text-sm text-blue-700 shadow-inner">
-                <p class="font-bold mb-4 text-lg border-b border-blue-300 pb-2 text-slate-800">Status Tag Input & Appearance Guide</p>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    
-                    <!-- LEFT COLUMN: Item Status Tags & Appearance -->
-                    <div class="pb-4 md:pb-0">
-                        <p class="font-bold mb-4 text-blue-800">1. Item Change Tags (Input & Result):</p>
-                        
-                        <div class="space-y-4">
-                            
-                            <!-- NEW Example -->
-                            <div class="p-3 rounded-lg border border-green-300 bg-green-50 shadow-sm">
-                                <p class="text-sm font-medium text-green-700 mb-2">Input: <code class="font-mono bg-green-200 px-2 py-0.5 rounded-md text-xs">[NEW]</code> </p>
-                                <div class="flex items-start pl-2 pt-2 border-t border-green-200">
-                                    <span class="text-green-600 font-extrabold mr-2 mt-0.5 text-lg leading-none flex-shrink-0">&#10003;</span>
-                                    <span class="px-2 py-0.5 text-xs font-bold rounded-full bg-green-100 text-green-700 flex-shrink-0 mr-2 shadow-sm uppercase">NEW</span>
-                                    <span class="text-green-700 text-sm ml-3">Indicates that a new feature, change, or element was added.</span>
-                                </div>
-                            </div>
-                            
-                            <!-- FIXED Example -->
-                            <div class="p-3 rounded-lg border border-amber-300 bg-amber-50 shadow-sm">
-                                <p class="text-sm font-medium text-amber-700 mb-2">Input: <code class="font-mono bg-amber-200 px-2 py-0.5 rounded-md text-xs">[FIXED]</code> </p>
-                                <div class="flex items-start pl-2 pt-2 border-t border-amber-200">
-                                    <span class="text-amber-600 font-extrabold mr-2 mt-0.5 text-lg leading-none flex-shrink-0">&#10003;</span>
-                                    <span class="px-2 py-0.5 text-xs font-bold rounded-full bg-amber-100 text-amber-700 flex-shrink-0 mr-2 shadow-sm uppercase">FIXED</span>
-                                    <span class="text-amber-700 text-sm ml-3">Indicates that an issue or bug was successfully resolved.</span>
-                                </div>
-                            </div>
-                            
-                            <!-- FIXING Example -->
-                            <div class="p-3 rounded-lg border border-cyan-300 bg-cyan-50 shadow-sm">
-                                <p class="text-sm font-medium text-cyan-700 mb-2">Input: <code class="font-mono bg-cyan-200 px-2 py-0.5 rounded-md text-xs">[FIXING]</code> </p>
-                                <div class="flex items-start pl-2 pt-2 border-t border-cyan-200">
-                                    <span class="text-cyan-600 font-extrabold mr-2 mt-0.5 text-lg leading-none flex-shrink-0">&#10006;</span>
-                                    <span class="px-2 py-0.5 text-xs font-bold rounded-full bg-cyan-100 text-cyan-700 flex-shrink-0 mr-2 shadow-sm uppercase">FIXING</span>
-                                    <span class="text-cyan-700 text-sm ml-3">Indicates known issue/bug currently being addressed.</span>
-                                </div>
-                            </div>
-                            
-                            <!-- REMOVED Example -->
-                            <div class="p-3 rounded-lg border border-red-300 bg-red-50 shadow-sm">
-                                <p class="text-sm font-medium text-red-700 mb-2">Input: <code class="font-mono bg-red-200 px-2 py-0.5 rounded-md text-xs">[REMOVED]</code> </p>
-                                <div class="flex items-start pl-2 pt-2 border-t border-red-200">
-                                    <span class="text-red-500 font-extrabold mr-2 mt-0.5 text-lg leading-none flex-shrink-0">&#10006;</span>
-                                    <span class="px-2 py-0.5 text-xs font-bold rounded-full bg-red-100 text-red-700 flex-shrink-0 mr-2 shadow-sm uppercase">REMOVED</span>
-                                    <span class="text-red-700 text-sm ml-3">Indicates that a feature, element, or dependency was taken out.</span>
-                                </div>
-                            </div>
-                            
-                        </div>
-                    </div>
-                    
-                    <!-- RIGHT COLUMN: Release Status Tags (Kept descriptions for clarity) -->
-                    <div class="border-t md:border-t-0 md:border-l md:pl-6 border-blue-300 pt-4 md:pt-0">
-                        <p class="font-bold mb-4 text-blue-800">2. Release Status Tags (For New Versions):</p>
-                        <p class="font-semibold text-slate-700 mb-3">These appear next to the version number:</p>
-                        <ul class="space-y-2 list-none pl-0">
-                            <li class="font-mono p-2 rounded-lg bg-purple-100 border border-purple-300 flex items-center">
-                                <span class="bg-purple-500 text-white px-2 py-0.5 rounded-md text-xs font-semibold uppercase mr-3">ALPHA</span> 
-                                <span class="text-purple-700 text-sm">Early testing, unstable build</span>
-                            </li>
-                            <li class="font-mono p-2 rounded-lg bg-orange-100 border border-orange-300 flex items-center">
-                                <span class="bg-orange-500 text-white px-2 py-0.5 rounded-md text-xs font-semibold uppercase mr-3">BETA</span> 
-                                <span class="text-orange-700 text-sm">Feature complete, public testing</span>
-                            </li>
-                            <li class="font-mono p-2 rounded-lg bg-deep-blue/20 border border-deep-blue/50 flex items-center">
-                                <span class="bg-deep-blue text-white px-2 py-0.5 rounded-md text-xs font-semibold uppercase mr-3">RELEASE</span> 
-                                <span class="text-deep-blue text-sm">Production ready, stable</span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-
-            <!-- 1a. Create New Version Form -->
-            <div class="bg-blue-50 p-4 rounded-lg border border-blue-200">
-                <h4 class="text-xl font-semibold mb-3 text-blue-600">1a. Create a New Version</h4>
-                <form id="new-version-form" class="space-y-3">
-                    
-                    <!-- Release Status Select -->
-                    <div>
-                        <label for="new-release-status" class="text-sm font-medium text-blue-700 block mb-1">Release Status:</label>
-                        <select id="new-release-status" required class="w-full p-2 border rounded-md focus:ring-blue-400 focus:border-blue-400">
-                            <option value="RELEASE" selected>Full Release</option>
-                            <option value="BETA">Beta</option>
-                            <option value="ALPHA">Alpha</option>
-                        </select>
-                    </div>
-
-                    <!-- New Version Input -->
-                    <input type="text" id="new-version" placeholder="Enter new Version Number (e.g., 2.3.0)" required 
-                        class="w-full p-2 border rounded-md focus:ring-blue-400 focus:border-blue-400" />
-                    
-                    <!-- Date Input -->
-                    <input type="datetime-local" id="new-date" required readonly
-                           class="w-full p-2 border rounded-md focus:ring-blue-400 focus:border-blue-400 bg-gray-100 cursor-not-allowed" />
-                    
-                    <!-- Description Input -->
-                    <textarea id="feature-description-new" placeholder="Enter change descriptions, one per line. Example: [NEW] Added new feature X" required rows="4"
-                           class="w-full p-2 border rounded-md focus:ring-blue-400 focus:border-blue-400 resize-y"></textarea>
-
-                    <button type="submit" class="w-full px-4 py-2 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-lg transition duration-150">
-                        Create New Version
-                    </button>
-                </form>
-            </div>
-
-            <!-- 1b. Add Changes to Existing Version Form -->
-            <div class="bg-indigo-50 p-4 rounded-lg border border-indigo-200">
-                <h4 class="text-xl font-semibold mb-3 text-indigo-600">1b. Add Changes to Existing Version</h4>
-                <form id="existing-version-form" class="space-y-3">
-                    
-                    <!-- Select Existing Version -->
-                    <div>
-                        <label for="existing-version-select" class="text-sm font-medium text-indigo-700 block mb-1">Select Version to Update:</label>
-                        <select id="existing-version-select" required
-                                class="w-full p-2 border rounded-md focus:ring-indigo-400 focus:border-indigo-400">
-                            <option value="">-- Select Existing Version --</option>
-                            <!-- Options populated by JS -->
-                        </select>
-                    </div>
-                    
-                    <!-- Description Input -->
-                    <textarea id="feature-description-existing" placeholder="Enter change descriptions, one per line. Example: [FIXED] Mobile layout glitch." required rows="4"
-                           class="w-full p-2 border rounded-md focus:ring-indigo-400 focus:border-indigo-400 resize-y"></textarea>
-
-                    <button type="submit" class="w-full px-4 py-2 bg-indigo-500 hover:bg-indigo-600 text-white font-semibold rounded-lg transition duration-150">
-                        Add Changes to Selected Version
-                    </button>
-                </form>
-            </div>
-            
-            <!-- 2. Delete Management Section -->
-            <div class="bg-red-50 p-4 rounded-lg border border-red-200">
-                <h4 class="text-xl font-semibold mb-3 text-red-600">2. Delete Version or Change Item</h4>
-                <div class="space-y-3">
-                    
-                    <!-- Select Version -->
-                    <div>
-                        <label for="version-select-for-deletion" class="text-sm font-medium text-red-700 block mb-1">Select Version:</label>
-                        <select id="version-select-for-deletion" class="w-full p-2 border border-red-300 rounded-md focus:ring-red-400 focus:border-red-400">
-                            <option value="">Select Version</option>
-                        </select>
-                    </div>
-
-                    <!-- Select Item (or entire version deletion) -->
-                    <div>
-                        <label for="item-select-for-deletion" class="text-sm font-medium text-red-700 block mb-1">Select Change Item / Delete Option:</label>
-                        <select id="item-select-for-deletion" disabled class="w-full p-2 border border-red-300 rounded-md focus:ring-red-400 focus:border-red-400 bg-gray-100">
-                            <option value="">Select an Item or Version Deletion Option</option>
-                        </select>
-                    </div>
-
-                    <button id="delete-selected-btn" disabled class="w-full px-4 py-2 bg-red-500 hover:bg-red-600 text-white font-semibold rounded-lg transition duration-150 disabled:bg-red-300">
-                        Delete Selected Entry
-                    </button>
-                </div>
-            </div>
-            
-            <!-- 3. Delete ALL Data Button (DANGER ZONE) -->
-            <div class="bg-red-100 p-4 rounded-lg border-2 border-dashed border-red-500 text-center">
-                <h4 class="text-xl font-semibold mb-3 text-red-700">3. Danger Zone: Delete ALL Changelogs</h4>
-                <p class="text-sm text-red-600 mb-4">Warning: This action will permanently delete ALL version history and data in the changelogs collection across all versions. This cannot be undone.</p>
-                <button id="delete-all-data-btn" class="w-full px-4 py-3 bg-red-700 hover:bg-red-800 text-white font-bold rounded-lg shadow-xl transition duration-150">
-                    PERMANENTLY DELETE ALL DATA
-                </button>
-            </div>
-
-        </section>
-
-        <!-- Change Log Timeline (Content rendered by JS from Firestore) -->
-        <section id="changelog-timeline" class="space-y-10">
-            <!-- Content will be dynamically inserted here by JavaScript -->
-            <p class="text-center text-slate-500 mt-10">Loading change log data...</p>
-        </section>
-
-        <!-- Footer -->
-        <footer class="text-center mt-16 py-4 text-slate-600/70 text-sm">
-            &copy; 2025 Icy Change Log | Updates are cold, hard facts.
-        </footer>
-
     </div>
 </body>
 </html>
