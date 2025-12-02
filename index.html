@@ -70,7 +70,7 @@
             text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
             pointer-events: none; /* Allows clicks to pass through */
             user-select: none;
-            z-index: 10; /* Below nav bar (z-50) but above content */
+            z-index: 10; 
         }
     </style>
 </head>
@@ -91,8 +91,8 @@
         </div>
     </nav>
 
-    <!-- MAIN CONTENT - Changed to flex-col to stack the hero and cards vertically -->
-    <main class="pt-20 pb-16 flex flex-col items-center justify-center min-h-screen px-4">
+    <!-- MAIN CONTENT - Adjusted padding to account for the fixed top nav bar and the newly fixed footer -->
+    <main class="pt-20 pb-12 flex flex-col items-center justify-center min-h-screen px-4">
         
         <!-- NEW HERO SECTION: Interactive Welcome Title -->
         <div class="text-center mb-16 max-w-4xl w-full">
@@ -150,6 +150,14 @@
             </a>
         </div>
     </main>
+    
+    <!-- FOOTER SECTION - Fixed to the bottom, transparent background, using minimal padding -->
+    <footer class="fixed bottom-0 left-0 right-0 w-full py-2 text-center z-40">
+        <a href="https://code-cat12.github.io/animations/changelog" 
+           class="text-white hover:text-gray-300 transition duration-200 text-xs font-medium opacity-80 hover:opacity-100 tracking-wider">
+            Change Log
+        </a>
+    </footer>
 
     <script>
         // --- KINETIC WELCOME HEADER JAVASCRIPT ---
