@@ -65,8 +65,7 @@
         /* Base style for a single snowflake */
         .snowflake {
             position: fixed;
-            color: #fff;
-            font-size: 1.5rem;
+            /* Color is now dynamic based on emoji, but text-shadow is kept for visibility */
             text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
             pointer-events: none; /* Allows clicks to pass through */
             user-select: none;
@@ -84,8 +83,8 @@
             <!-- Centered Element: Snowflake Emoji and Brand Text -->
             <div class="text-white text-base font-bold flex items-center">
                 <!-- Reduced emoji size to text-xl --><span class="text-xl mr-2">❄️</span>
-                <!-- Updated text from @IcyYT to @Icy -->
-                <a href="#" class="text-gray-300 hover:text-white transition duration-150 font-bold tracking-wider">@Icy</a>
+                <!-- Updated text to @Icy's Winter Update -->
+                <a href="#" class="text-gray-300 hover:text-white transition duration-150 font-bold tracking-wider">@Icy's Winter Update</a>
             </div>
             
         </div>
@@ -106,7 +105,7 @@
         <!-- Container for the two interactive cards/buttons --><div class="flex flex-col lg:flex-row gap-8 max-w-5xl w-full">
             
             <!-- Forsaken Animations Card (Vibrant Red to Black Gradient) -->
-            <a href="https://code-cat12.github.io/animations/forsaken" class="flex-1 block 
+            <a href="https://code-cat12.github.io/forsaken" class="flex-1 block 
                 transform hover:scale-[1.03] transition duration-300 ease-in-out 
                 bg-gradient-to-tr from-red-600 to-black rounded-xl overflow-hidden shadow-2xl 
                 hover:shadow-red-900/70 group border border-white/30 
@@ -128,7 +127,7 @@
             </a>
 
             <!-- Icy Animations Card (Vibrant Blue to Purple Gradient) -->
-            <a href="https://code-cat12.github.io/animations/icy/" class="flex-1 block 
+            <a href="https://code-cat12.github.io/animations/icy-v2" class="flex-1 block 
                 transform hover:scale-[1.03] transition duration-300 ease-in-out 
                 bg-gradient-to-tr from-blue-500 to-purple-700 rounded-xl overflow-hidden shadow-2xl 
                 hover:shadow-blue-900/70 group border border-white/30
@@ -150,6 +149,15 @@
             </a>
         </div>
     </main>
+    
+    <!-- FOOTER SECTION - Fixed to the bottom, transparent background, using minimal padding -->
+    <footer class="fixed bottom-0 left-0 right-0 w-full py-2 text-center z-40">
+        <!-- Link text changed to Releases and URL updated to the GitHub releases page -->
+        <a href="https://github.com/code-cat12/animations/releases" 
+           class="text-white hover:text-gray-300 transition duration-200 text-xs font-medium opacity-80 hover:opacity-100 tracking-wider">
+            Releases
+        </a>
+    </footer>
 
     <script>
         // --- KINETIC WELCOME HEADER JAVASCRIPT ---
@@ -165,8 +173,8 @@
                 const span = document.createElement('span');
                 span.textContent = char === ' ' ? '\u00A0' : char; // Use non-breaking space for actual spaces
                 
-                // Apply gradient colors to the letter span
-                span.classList.add('bg-clip-text', 'text-transparent', 'bg-gradient-to-r', 'from-white', 'to-gray-300');
+                // Apply the new red-to-green pastel gradient
+                span.classList.add('bg-clip-text', 'text-transparent', 'bg-gradient-to-r', 'from-red-300', 'to-green-300');
 
                 container.appendChild(span);
                 letters.push(span);
@@ -211,12 +219,18 @@
         }
         
         // --- SNOWFALL EFFECT JAVASCRIPT ---
-        const initialFlakeCount = 25; 
+        // INCREASED DENSITY: Initial count raised from 25 to 60
+        const initialFlakeCount = 60; 
         
         function createSnowflake(isInitial = false) {
             const snowflake = document.createElement('span');
             snowflake.classList.add('snowflake');
-            snowflake.innerHTML = '❄️';
+            
+            // Re-introducing the 50:50 split of snowflakes and Christmas trees
+            const element = Math.random() < 0.5 ? '❄️' : '🎄'; 
+            snowflake.innerHTML = element;
+            
+            // Note: The 'color' style property is no longer set here, relying on emoji default colors.
             
             snowflake.style.left = Math.random() * 100 + 'vw';
             snowflake.style.fontSize = (Math.random() * 0.8 + 1.2) + 'rem'; 
@@ -247,7 +261,8 @@
         }
 
         function startContinuousSnow() {
-            setInterval(() => createSnowflake(false), 1000); 
+            // INCREASED DENSITY: New flakes created every 400ms instead of 1000ms
+            setInterval(() => createSnowflake(false), 400); 
         }
 
         // Start all interactions when the window loads
