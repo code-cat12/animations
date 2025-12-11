@@ -39,6 +39,9 @@
                 #a78bfa 50%,         /* Lighter Purple-400 */
                 #60a5fa 100%         /* Lighter Blue-400 */
             );
+            /* --- PARALLAX EFFECT (Option 5) --- */
+            background-attachment: fixed;
+            background-size: cover;
         }
 
         /* --- KINETIC HEADER STYLES --- */
@@ -71,20 +74,30 @@
             user-select: none;
             z-index: 10; 
         }
+
+        /* --- BADGE PULSE STYLES --- */
+        @keyframes pulse-light {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7); }
+            50% { box-shadow: 0 0 0 8px rgba(255, 255, 255, 0); }
+        }
+        .pulse-badge {
+            animation: pulse-light 2s infinite;
+        }
     </style>
 </head>
 <!-- Applying the custom tri-gradient class for the body background --><body class="tri-gradient min-h-screen font-sans">
 
-    <!-- TOP NAVIGATION BAR (Fixed, Blackish Gray, 20% Transparent / 80% Opacity) -->
-    <nav class="fixed top-0 left-0 w-full z-50 bg-gray-900/80 backdrop-blur-sm shadow-xl">
+    <!-- TOP NAVIGATION BAR (Fixed, White Frosted, 55% Opaque / 45% Transparent) -->
+    <!-- UPDATED: Changed background to bg-white/55 and blur to backdrop-blur-lg -->
+    <nav class="fixed top-0 left-0 w-full z-50 bg-white/55 backdrop-blur-lg shadow-xl">
         <!-- Center aligns the content using justify-center -->
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-center items-center py-2">
             
             <!-- Centered Element: Snowflake Emoji and Brand Text -->
             <div class="text-white text-base font-bold flex items-center">
                 <!-- Reduced emoji size to text-xl --><span class="text-xl mr-2">❄️</span>
-                <!-- Updated text to @Icy's Winter Update -->
-                <a href="#" class="text-gray-300 hover:text-white transition duration-150 font-bold tracking-wider">@Icy's Winter Update</a>
+                <!-- Updated text to @Icy's Winter Update - Set to text-white for maximum contrast -->
+                <a href="#" class="text-white hover:text-gray-300 transition duration-150 font-bold tracking-wider">@Icy's Winter Update</a>
             </div>
             
         </div>
@@ -93,27 +106,34 @@
     <!-- MAIN CONTENT - Adjusted padding to account for the fixed top nav bar and the newly fixed footer -->
     <main class="pt-20 pb-12 flex flex-col items-center justify-center min-h-screen px-4">
         
-        <!-- NEW HERO SECTION: Interactive Welcome Title -->
-        <div class="text-center mb-16 max-w-4xl w-full">
+        <!-- NEW HERO SECTION: Interactive Welcome Title (max-w-4xl and mb-16 removed) -->
+        <div class="text-center w-full mb-12">
             <!-- NEW RELEASE DATE TEXT: Small, White, 50% Opacity, and Uppercase -->
-            <p class="text-white text-sm font-medium opacity-50 mb-2 tracking-widest uppercase">
+            <p class="text-white text-sm font-medium opacity-50 mb-4 tracking-widest uppercase">
                 Official Release on December 22nd
             </p>
+
             <!-- Container for the kinetic title (text injected by JS) -->
-            <h1 id="kinetic-welcome" class="text-3xl sm:text-5xl font-extrabold text-white mt-2 leading-tight tracking-tight drop-shadow-lg">
+            <h1 id="kinetic-welcome" class="text-3xl sm:text-5xl font-extrabold text-white leading-tight tracking-tight drop-shadow-lg">
                 <!-- Letters will be injected here -->
             </h1>
         </div>
         <!-- END NEW HERO SECTION -->
 
-        <!-- Container for the two interactive cards/buttons --><div class="flex flex-col lg:flex-row gap-8 max-w-5xl w-full">
+        <!-- Container for the two interactive cards/buttons -->
+        <div class="flex flex-col lg:flex-row gap-8 max-w-5xl w-full">
             
             <!-- Forsaken Animations Card (Vibrant Red to Black Gradient) -->
-            <a href="https://code-cat12.github.io/forsaken" class="flex-1 block 
+            <a href="https://code-cat12.github.io/forsaken" class="relative flex-1 block 
                 transform hover:scale-[1.03] transition duration-300 ease-in-out 
                 bg-gradient-to-tr from-red-600 to-black rounded-xl overflow-hidden shadow-2xl 
                 hover:shadow-red-900/70 group border border-white/30 
                 focus:ring-4 focus:ring-white/50 focus:outline-none">
+                
+                <!-- NEW BADGE (Option 4) - Now includes pulse-badge class -->
+                <span class="absolute top-2 right-2 px-3 py-1 text-xs font-bold uppercase rounded-full bg-white text-red-600 shadow-md pulse-badge z-20">
+                    New
+                </span>
 
                 <!-- Banner Image (Height: h-64) --><img src="https://staticg.sportskeeda.com/editor/2025/11/471bd-17619648050568-1920.jpg" 
                     alt="Forsaken Animation Banner"
@@ -135,10 +155,14 @@
                 transform hover:scale-[1.03] transition duration-300 ease-in-out 
                 bg-gradient-to-tr from-blue-500 to-purple-700 rounded-xl overflow-hidden shadow-2xl 
                 hover:shadow-blue-900/70 group border border-white/30
-                focus:ring-4 focus:ring-white/50 focus:outline-none">
+                focus:ring-4 focus:ring-white/50 focus:outline-none relative">
+                
+                <!-- ADDED UPDATE BADGE - Includes pulse-badge class for consistency -->
+                <span class="absolute top-2 right-2 px-3 py-1 text-xs font-bold uppercase rounded-full bg-white text-blue-600 shadow-md z-20 pulse-badge">
+                    Update!
+                </span>
 
                 <!-- Banner Image (Height: h-64) -->
-                <!-- Reverting to the external URL as requested -->
                 <img src="https://tr.rbxcdn.com/180DAY-619c32f02048495af06eb6c9830fda6a/768/432/Image/Png/noFilter" 
                     alt="Icy Animations Banner"
                     class="w-full h-64 object-cover group-hover:opacity-85 transition duration-300"
@@ -171,7 +195,8 @@
             const container = document.getElementById('kinetic-welcome');
             if (!container) return;
 
-            const text = "Welcome";
+            // Reverted text back to "Welcome"
+            const text = "Welcome"; 
             const letters = [];
 
             // 1. Split text into spans
@@ -225,8 +250,8 @@
         }
         
         // --- SNOWFALL EFFECT JAVASCRIPT ---
-        // INCREASED DENSITY: Initial count raised from 25 to 60
-        const initialFlakeCount = 60; 
+        // DECREASED DENSITY: Initial count now 43, and interval is 700ms
+        const initialFlakeCount = 43; 
         
         function createSnowflake(isInitial = false) {
             const snowflake = document.createElement('span');
@@ -267,8 +292,8 @@
         }
 
         function startContinuousSnow() {
-            // INCREASED DENSITY: New flakes created every 400ms instead of 1000ms
-            setInterval(() => createSnowflake(false), 400); 
+            // DECREASED DENSITY: New flakes created every 700ms 
+            setInterval(() => createSnowflake(false), 700); 
         }
 
         // Start all interactions when the window loads
