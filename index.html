@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Animations</title> <!-- Title updated to "Animations" -->
+    <title>Icy Animations</title> <!-- Title updated to "Animations" -->
     <!-- Favicon: Using a snowflake emoji (❄️) via inline SVG -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>❄️</text></svg>">
     
@@ -34,10 +34,11 @@
         }
         /* Custom CSS for the three-stop gradient: lighter red -> lighter purple -> lighter blue */
         .tri-gradient {
+            /* REVERTED: Back to a three-stop gradient: Red -> Blue -> Purple */
             background: linear-gradient(to right, 
-                #ef4444 0%,         /* Lighter Red-500 */
-                #a78bfa 50%,         /* Lighter Purple-400 */
-                #60a5fa 100%         /* Lighter Blue-400 */
+                #ef4444 0%,         /* Red-500 */
+                #60a5fa 50%,        /* Blue-400 */
+                #a78bfa 100%        /* Purple-400 */
             );
             /* --- PARALLAX EFFECT (Option 5) --- */
             background-attachment: fixed;
@@ -103,11 +104,13 @@
         </div>
     </nav>
 
-    <!-- MAIN CONTENT - Adjusted padding to account for the fixed top nav bar and the newly fixed footer -->
-    <main class="pt-20 pb-12 flex flex-col items-center justify-center min-h-screen px-4">
+    <!-- MAIN CONTENT - REMOVED min-h-screen and reduced padding/margins -->
+    <!-- pt-20 reduced to pt-16, removed min-h-screen -->
+    <main class="pt-16 flex flex-col items-center justify-center px-4">
         
-        <!-- NEW HERO SECTION: Interactive Welcome Title (max-w-4xl and mb-16 removed) -->
-        <div class="text-center w-full mb-12">
+        <!-- NEW HERO SECTION: Interactive Welcome Title -->
+        <!-- mb-12 reduced to mb-8 -->
+        <div class="text-center w-full mb-8">
             <!-- NEW RELEASE DATE TEXT: Small, White, 50% Opacity, and Uppercase -->
             <p class="text-white text-sm font-medium opacity-50 mb-4 tracking-widest uppercase">
                 Official Release on December 22nd
@@ -120,8 +123,9 @@
         </div>
         <!-- END NEW HERO SECTION -->
 
-        <!-- Container for the two interactive cards/buttons -->
-        <div class="flex flex-col lg:flex-row gap-8 max-w-5xl w-full">
+        <!-- CONTAINER FOR ALL CARDS -->
+        <!-- mb-6 reduced to mb-4 -->
+        <div class="flex flex-col lg:flex-row gap-6 max-w-3xl w-full mb-4">
             
             <!-- Forsaken Animations Card (Vibrant Red to Black Gradient) -->
             <a href="https://code-cat12.github.io/animations/forsaken" class="relative flex-1 block 
@@ -135,14 +139,14 @@
                     New
                 </span>
 
-                <!-- Banner Image (Height: h-64) -->
+                <!-- Banner Image (Dynamic Height to fit image content) -->
                 <img src="https://staticg.sportskeeda.com/editor/2025/11/471bd-17619648050568-1920.jpg" 
                     alt="Forsaken Animation Banner"
-                    class="w-full h-64 object-cover group-hover:opacity-85 transition duration-300"
+                    class="w-full object-contain bg-gray-900 group-hover:opacity-85 transition duration-300"
                     onerror="this.onerror=null;this.src='https://placehold.co/768x432/333333/ef4444?text=Forsaken+Animations%3A+Load+Failed';">
                 
-                <div class="p-6 text-center">
-                    <p class="text-white text-3xl font-bold tracking-wide drop-shadow-lg mb-1">
+                <div class="p-4 text-center">
+                    <p class="text-white text-2xl font-bold tracking-wide drop-shadow-lg mb-1">
                         Forsaken Animations
                     </p>
                     <p class="text-gray-300 text-sm font-light">
@@ -163,15 +167,14 @@
                     Update!
                 </span>
 
-                <!-- Banner Image (Height: h-64) -->
-                <!-- Image URL updated to use the new postimg link -->
+                <!-- Banner Image (Dynamic Height to fit image content) -->
                 <img src="https://i.postimg.cc/Fzm43475/no-Filter.png" 
                     alt="Icy Animations Banner"
-                    class="w-full h-64 object-cover group-hover:opacity-85 transition duration-300"
+                    class="w-full object-contain bg-gray-900 group-hover:opacity-85 transition duration-300"
                     onerror="this.onerror=null;this.src='https://placehold.co/768x432/4c2f6d/60a5fa?text=Icy+Animations%3A+Load+Failed';">
 
-                <div class="p-6 text-center">
-                    <p class="text-white text-3xl font-bold tracking-wide drop-shadow-lg mb-1">
+                <div class="p-4 text-center">
+                    <p class="text-white text-2xl font-bold tracking-wide drop-shadow-lg mb-1">
                         Icy Animations
                     </p>
                     <p class="text-gray-300 text-sm font-light">
@@ -180,10 +183,46 @@
                 </div>
             </a>
         </div>
+        
+        <!-- Row 2: Single centered card for Winter Animations (Now same width as a single card above on desktop) -->
+        <div class="max-w-3xl w-full">
+            <a href="https://code-cat12.github.io/animations/winter" class="relative block mx-auto w-full lg:w-1/2
+                transform hover:scale-[1.03] transition duration-300 ease-in-out
+                /* Card gradient: Teal-to-Yellow */
+                bg-gradient-to-tr from-teal-500 to-yellow-500 rounded-xl overflow-hidden shadow-2xl
+                /* Hover shadow updated to match new gradient */
+                hover:shadow-yellow-700/70 group border border-white/30
+                focus:ring-4 focus:ring-white/50 focus:outline-none">
+                
+                <!-- Badge updated to Limited Time -->
+                <span class="absolute top-2 right-2 px-3 py-1 text-xs font-bold uppercase rounded-full bg-white text-teal-500 shadow-md pulse-badge z-20">
+                    Limited Time
+                </span>
+
+                <!-- Banner Image (Dynamic Height to fit image content) -->
+                <img src="https://pbs.twimg.com/media/G5ozTKLacAIhB-m?format=jpg&name=large"
+                    alt="Winter Animations Banner"
+                    class="w-full object-contain bg-gray-900 group-hover:opacity-85 transition duration-300"
+                    onerror="this.onerror=null;this.src='https://placehold.co/768x432/333366/00cec9?text=Winter+Animations%3A+Load+Failed';">
+                
+                <div class="p-4 text-center">
+                    <!-- Title text is white -->
+                    <p class="text-white text-2xl font-bold tracking-wide mb-1">
+                        Winter Animations
+                    </p>
+                    <!-- Description text is white -->
+                    <p class="text-white text-sm font-light">
+                        Seasonal effects including frosty combat and unique holiday character rigs.
+                    </p>
+                </div>
+            </a>
+        </div>
+        
     </main>
     
-    <!-- FOOTER SECTION - Fixed to the bottom, transparent background, using minimal padding -->
-    <footer class="fixed bottom-0 left-0 right-0 w-full py-2 text-center z-40">
+    <!-- FOOTER SECTION - Scrolls naturally with content. -->
+    <!-- mt-12 reduced to mt-6 -->
+    <footer class="w-full py-4 text-center mt-6">
         <!-- Link text changed to Releases and URL updated to the GitHub releases page -->
         <a href="https://github.com/code-cat12/animations/releases" 
            class="text-white hover:text-gray-300 transition duration-200 text-xs font-medium opacity-80 hover:opacity-100 tracking-wider">
