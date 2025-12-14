@@ -123,9 +123,9 @@
         </div>
         <!-- END NEW HERO SECTION -->
 
-        <!-- CONTAINER FOR ALL CARDS -->
-        <!-- mb-6 reduced to mb-4 -->
-        <div class="flex flex-col lg:flex-row gap-6 max-w-3xl w-full mb-4">
+        <!-- CONTAINER FOR ALL CARDS - ROW 1 (Forsaken & Icy) -->
+        <!-- Increased max-w-3xl to max-w-6xl and gap-8 to lg:gap-16 for desktop -->
+        <div class="flex flex-col lg:flex-row gap-8 lg:gap-16 max-w-6xl w-full mb-8">
             
             <!-- Forsaken Animations Card (Vibrant Red to Black Gradient) -->
             <a href="https://code-cat12.github.io/animations/forsaken" class="relative flex-1 block 
@@ -184,8 +184,11 @@
             </a>
         </div>
         
-        <!-- Row 2: Single centered card for Winter Animations (Now same width as a single card above on desktop) -->
-        <div class="max-w-3xl w-full">
+        <!-- CONTAINER FOR ALL CARDS - ROW 2 (Winter only - adjusted to be centered) -->
+        <!-- Increased max-w-3xl to max-w-6xl and gap-8 to lg:gap-16 for desktop -->
+        <div class="flex flex-col lg:flex-row gap-8 lg:gap-16 max-w-6xl w-full mb-8">
+            
+            <!-- Winter Animations Card (Now centered with mx-auto w-full lg:w-1/2, scaled relative to the new max-w-6xl) -->
             <a href="https://code-cat12.github.io/animations/winter" class="relative block mx-auto w-full lg:w-1/2
                 transform hover:scale-[1.03] transition duration-300 ease-in-out
                 /* Card gradient: Teal-to-Yellow */
@@ -216,6 +219,7 @@
                     </p>
                 </div>
             </a>
+            
         </div>
         
     </main>
