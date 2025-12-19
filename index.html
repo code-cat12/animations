@@ -52,6 +52,8 @@
             will-change: transform; /* Performance optimization */
         }
 
+        /* NOTE: .text-outline-black class and style have been removed as requested. */
+        
         /* --- SNOWFALL EFFECT STYLES --- */
         
         /* Keyframes for the falling animation */
@@ -132,6 +134,96 @@
             transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1); 
             border-radius: 9999px;
         }
+
+        /* --- SNOWFALL TOGGLE STYLES (New) --- */
+        .snow-toggle-container {
+            position: relative;
+            display: inline-block;
+            width: 48px; /* w-12 */
+            height: 24px; /* h-6 */
+        }
+
+        .snow-toggle-input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        /* The slider track */
+        .snow-toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(255, 255, 255, 0.25); /* Light gray/white for OFF state */
+            transition: background-color .4s;
+            border-radius: 24px;
+        }
+
+        /* The thumb (using ::before) */
+        .snow-toggle-slider:before {
+            position: absolute;
+            content: "❄️"; /* Default icon (ON state) */
+            height: 20px;
+            width: 20px;
+            left: 2px;
+            bottom: 2px;
+            background-color: white;
+            transition: .4s transform;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            line-height: 1;
+        }
+
+        /* When checked (ON state) */
+        .snow-toggle-input:checked + .snow-toggle-slider {
+            background-color: #60a5fa; /* Tailwind Blue-400 for ON */
+        }
+
+        .snow-toggle-input:checked + .snow-toggle-slider:before {
+            transform: translateX(24px); 
+        }
+
+        /* When NOT checked (OFF state) */
+        .snow-toggle-input:not(:checked) + .snow-toggle-slider:before {
+            content: "🌧️"; /* Rain cloud for OFF state */
+        }
+
+        /* --- Custom Tooltip Styles --- */
+        .custom-tooltip {
+            position: absolute;
+            top: 100%; /* Position below the toggle */
+            right: 0;
+            transform: translateY(10px);
+            z-index: 60;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.2s, visibility 0.2s, transform 0.2s;
+            pointer-events: none;
+            width: max-content; /* Only take up the space needed */
+        }
+
+        .show-tooltip {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        /* Arrow for the tooltip */
+        .custom-tooltip::before {
+            content: "";
+            position: absolute;
+            top: -5px;
+            right: 12px;
+            border-width: 0 5px 5px 5px;
+            border-style: solid;
+            border-color: transparent transparent #1f2937 transparent; /* Dark gray to match tooltip bg */
+        }
     </style>
 </head>
 <!-- Applying new layout: flex flex-col min-h-screen ensures the footer is pushed to the bottom -->
@@ -160,16 +252,42 @@
     <div id="main-content-wrapper" class="opacity-0 transition-opacity duration-500 flex flex-col min-h-screen w-full">
 
         <!-- TOP NAVIGATION BAR (Fixed, White Frosted, 45% Opaque / 55% Transparent) -->
-        <!-- Background set to bg-white/45 for 45% opacity -->
         <nav class="fixed top-0 left-0 w-full z-50 bg-white/45 backdrop-blur-lg shadow-xl">
-            <!-- Center aligns the content using justify-center -->
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-center items-center py-2">
+            <!-- Restructured nav to place title on the left and elements on the right -->
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center py-2 relative">
                 
-                <!-- Centered Element: Snowflake Emoji and Brand Text -->
+                <!-- 1. Left (Brand Text - Now Left Aligned, Outline removed) -->
                 <div class="text-white text-base font-bold flex items-center">
-                    <!-- Reduced emoji size to text-xl --><span class="text-xl mr-2">❄️</span>
-                    <!-- Updated text to @Icy's Winter Update - Set to text-white for maximum contrast -->
+                    <span class="text-xl mr-2">❄️</span> 
                     <a href="#" class="text-white hover:text-gray-300 transition duration-150 font-bold tracking-wider">@Icy's Winter Update</a>
+                </div>
+
+                <!-- 2. Right (About Me, Icy AI and Snow Toggle) -->
+                <div class="flex items-center space-x-6">
+                    <!-- About Me Link - Updated to specific directory -->
+                    <a href="https://code-cat12.github.io/animations/about-me" class="text-white text-sm font-bold hover:text-gray-300 transition duration-150 tracking-wider">
+                        About Me
+                    </a>
+
+                    <!-- New Icy AI Link - Updated to specific directory -->
+                    <a href="https://code-cat12.github.io/animations/ai" class="text-white text-sm font-bold hover:text-gray-300 transition duration-150 tracking-wider">
+                        Icy AI
+                    </a>
+
+                    <!-- Snow Toggle Switch and Tooltip -->
+                    <div id="toggle-container" class="relative">
+                        <label id="snow-toggle-label" class="snow-toggle-container" 
+                               title="Toggle Snow and Tree Animations" 
+                               aria-label="Toggle Snowfall Effect">
+                            <input type="checkbox" id="snow-toggle-checkbox" class="snow-toggle-input" checked>
+                            <span class="snow-toggle-slider"></span>
+                        </label>
+
+                        <!-- Custom Tooltip Element (Hidden by default) -->
+                        <div id="toggle-tooltip" class="custom-tooltip bg-gray-800 text-white text-xs font-medium py-1 px-3 rounded-lg shadow-xl">
+                            Toggle Snow/Tree Effects
+                        </div>
+                    </div>
                 </div>
                 
             </div>
@@ -181,7 +299,7 @@
             <!-- NEW HERO SECTION: Interactive Welcome Title -->
             <!-- mb-12 reduced to mb-8 -->
             <div class="text-center w-full mb-8">
-                <!-- NEW RELEASE DATE TEXT: Small, White, 50% Opacity, and Uppercase -->
+                <!-- NEW RELEASE DATE TEXT: Small, White, 50% Opcity, and Uppercase -->
                 <p class="text-white text-sm font-medium opacity-50 mb-4 tracking-widest uppercase">
                     Official Release on December 22nd
                 </p>
@@ -283,9 +401,9 @@
                         <p class="text-white text-2xl font-bold tracking-wide mb-1">
                             Winter Animations
                         </p>
-                        <!-- Description text is white -->
+                        <!-- Description text is white (Shortened by one word) -->
                         <p class="text-white text-sm font-light">
-                            Seasonal effects including frosty combat and unique holiday character rigs.
+                            Seasonal effects including frosty combat and holiday character rigs.
                         </p>
                     </div>
                 </a>
@@ -305,162 +423,135 @@
     </div> <!-- END main-content-wrapper -->
 
     <script>
+        // Global variables for snow control
+        let snowIntervalId = null;
+        let isSnowing = false; 
+        
         // --- KINETIC WELCOME HEADER JAVASCRIPT ---
         function initKineticWelcome() {
             const container = document.getElementById('kinetic-welcome');
             if (!container) return;
 
-            // Reverted text back to "Welcome"
             const text = "Welcome"; 
             const letters = [];
 
-            // 1. Split text into spans
             text.split('').forEach(char => {
                 const span = document.createElement('span');
-                span.textContent = char === ' ' ? '\u00A0' : char; // Use non-breaking space for actual spaces
-                
-                // Apply the new red-to-green pastel gradient
+                span.textContent = char === ' ' ? '\u00A0' : char; 
                 span.classList.add('bg-clip-text', 'text-transparent', 'bg-gradient-to-r', 'from-red-300', 'to-green-300');
-
                 container.appendChild(span);
                 letters.push(span);
             });
 
-            // 2. Mouse move handler
-            const repulsionStrength = 25; // Reduced from 50 for less movement
-            const repulsionRadius = 75;  // Reduced from 100 for a tighter interaction area
+            const repulsionStrength = 25; 
+            const repulsionRadius = 75;  
 
             document.addEventListener('mousemove', (e) => {
                 letters.forEach(span => {
-                    // Get the letter's bounding box and center coordinates
                     const rect = span.getBoundingClientRect();
                     const letterX = rect.left + rect.width / 2;
                     const letterY = rect.top + rect.height / 2;
-
-                    // Calculate distance from mouse to letter's center
                     const dx = e.clientX - letterX;
                     const dy = e.clientY - letterY;
                     const distance = Math.sqrt(dx * dx + dy * dy);
 
                     let translateY = 0;
-
                     if (distance < repulsionRadius) {
-                        // Calculate the "repulsion" factor (0 to 1)
                         const repulsionFactor = 1 - (distance / repulsionRadius);
-                        
-                        // Calculate vertical movement:
-                        // If mouse is above the letter (dy is negative), move letter down (positive translateY)
-                        // If mouse is below the letter (dy is positive), move letter up (negative translateY)
                         const direction = dy > 0 ? -1 : 1;
-                        
-                        // We scale the repulsion strength based on the proximity and the direction
-                        // The effect is to push the letter away from the mouse's Y-position.
                         translateY = direction * repulsionStrength * repulsionFactor;
                     }
-                    
-                    // Apply the transform
                     span.style.transform = `translateY(${translateY}px)`;
                 });
             });
         }
         
         // --- SNOWFALL EFFECT JAVASCRIPT ---
-        // DECREASED DENSITY: Initial count now 43, and interval is 700ms
         const initialFlakeCount = 43; 
         
         function createSnowflake(isInitial = false) {
             const snowflake = document.createElement('span');
             snowflake.classList.add('snowflake');
-            
-            // Re-introducing the 50:50 split of snowflakes and Christmas trees
             const element = Math.random() < 0.5 ? '❄️' : '🎄'; 
             snowflake.innerHTML = element;
-            
-            // Note: The 'color' style property is no longer set here, relying on emoji default colors.
-            
             snowflake.style.left = Math.random() * 100 + 'vw';
             snowflake.style.fontSize = (Math.random() * 0.8 + 1.2) + 'rem'; 
-            
             const fallDuration = (Math.random() * 10 + 5).toFixed(2);
             const spinDuration = (Math.random() * 20 + 10).toFixed(2);
-            
             let delay = (Math.random() * 5).toFixed(2); 
-
             if (isInitial) {
                 const maxFallDuration = 15;
                 delay = -(Math.random() * maxFallDuration).toFixed(2);
             }
-            
-            snowflake.style.animation = 
-                `fall ${fallDuration}s linear infinite, 
-                 spin ${spinDuration}s linear infinite`;
-            
+            snowflake.style.animation = `fall ${fallDuration}s linear infinite, spin ${spinDuration}s linear infinite`;
             snowflake.style.animationDelay = `${delay}s`;
-            
             document.body.appendChild(snowflake);
         }
 
         function initSnowfall() {
-            for (let i = 0; i < initialFlakeCount; i++) {
-                createSnowflake(true); 
+            if (document.querySelectorAll('.snowflake').length === 0) {
+                for (let i = 0; i < initialFlakeCount; i++) {
+                    createSnowflake(true); 
+                }
             }
         }
 
         function startContinuousSnow() {
-            // DECREASED DENSITY: New flakes created every 700ms 
-            setInterval(() => createSnowflake(false), 700); 
+            if (snowIntervalId === null) {
+                snowIntervalId = setInterval(() => createSnowflake(false), 700); 
+                isSnowing = true;
+            }
+        }
+        
+        function toggleSnowfall() {
+            const checkbox = document.getElementById('snow-toggle-checkbox');
+            if (checkbox.checked) {
+                startContinuousSnow();
+                document.querySelectorAll('.snowflake').forEach(flake => { flake.style.display = 'block'; });
+            } else {
+                clearInterval(snowIntervalId);
+                snowIntervalId = null;
+                isSnowing = false;
+                document.querySelectorAll('.snowflake').forEach(flake => { flake.style.display = 'none'; });
+            }
         }
 
+        function initTooltip() {
+            const toggleLabel = document.getElementById('snow-toggle-label');
+            const tooltip = document.getElementById('toggle-tooltip');
+            toggleLabel.addEventListener('mouseenter', () => { tooltip.classList.add('show-tooltip'); });
+            toggleLabel.addEventListener('mouseleave', () => { setTimeout(() => { tooltip.classList.remove('show-tooltip'); }, 100); });
+            toggleLabel.addEventListener('touchstart', () => { tooltip.classList.add('show-tooltip'); });
+            toggleLabel.addEventListener('touchend', () => { setTimeout(() => { tooltip.classList.remove('show-tooltip'); }, 1500); });
+        }
 
         // --- LOADING SCREEN JAVASCRIPT LOGIC ---
-
         function updateLoading(progress, status) {
             const progressBar = document.getElementById('progress-bar');
             const loadingPercentage = document.getElementById('loading-percentage');
             const loadingStatus = document.getElementById('loading-status');
-
-            // Ensure progress is clamped between 0 and 100
             const clampedProgress = Math.max(0, Math.min(100, progress));
-
             progressBar.style.width = `${clampedProgress}%`;
             loadingPercentage.textContent = `${Math.round(clampedProgress)}%`;
             loadingStatus.textContent = status;
         }
 
-        /**
-         * Waits for all critical images to load.
-         * @param {string[]} imageUrls - Array of image URLs to wait for.
-         * @param {number} startProgress - The starting percentage for this loading phase.
-         * @param {number} endProgress - The ending percentage for this loading phase.
-         * @returns {Promise<void>}
-         */
         function waitForImages(imageUrls, startProgress, endProgress) {
             return new Promise(resolve => {
                 let loadedCount = 0;
                 const totalCount = imageUrls.length;
-
-                if (totalCount === 0) {
-                    resolve();
-                    return;
-                }
-
+                if (totalCount === 0) { resolve(); return; }
                 const progressRange = endProgress - startProgress;
-
                 const checkCompletion = () => {
                     loadedCount++;
-                    // Map image loading to the specified progress range
                     const progress = Math.floor((loadedCount / totalCount) * progressRange) + startProgress; 
-                    // Update status dynamically during image loading
                     updateLoading(progress, `Downloading resources (${loadedCount}/${totalCount})...`);
-                    if (loadedCount === totalCount) {
-                        resolve();
-                    }
+                    if (loadedCount === totalCount) resolve();
                 };
-
                 imageUrls.forEach(url => {
                     const img = new Image();
                     img.onload = checkCompletion;
-                    img.onerror = checkCompletion; // Count failed loads as complete to prevent hanging
+                    img.onerror = checkCompletion; 
                     img.src = url;
                 });
             });
@@ -469,79 +560,53 @@
         async function runLoadingSequence() {
             const loadingScreen = document.getElementById('loading-screen');
             const contentWrapper = document.getElementById('main-content-wrapper');
-
-            // Initial Quick Steps (0% to 10%)
             updateLoading(0, 'Establishing secure connection...');
             await new Promise(r => setTimeout(r, 400));
             updateLoading(5, 'Launch sequence initiated.');
             await new Promise(r => setTimeout(r, 200));
-
-            // 1. Collect image URLs from the document
             const imageElements = document.querySelectorAll('main img');
-            const imageUrls = Array.from(imageElements)
-                                .map(img => img.src)
-                                .filter(src => src && !src.includes('placehold.co'));
-
-            // 2. Wait for main images to load (5% - 40%)
-            // Status update happens inside waitForImages (e.g., "Downloading resources (1/3)...")
+            const imageUrls = Array.from(imageElements).map(img => img.src).filter(src => src && !src.includes('placehold.co'));
             updateLoading(10, 'Preparing critical media assets...');
             await waitForImages(imageUrls, 10, 40);
-
-            // 3. Simulate granular initialization steps (40% - 99%)
             let currentProgress = 40;
-            
             const initializationSteps = [
-                { status: 'Running environment compatibility checks...', progressEnd: 48, duration: 200 },
-                { status: 'Parsing application configuration files...', progressEnd: 55, duration: 300 },
-                { status: 'Calibrating kinetic header repulsion model...', progressEnd: 65, duration: 400 },
-                { status: 'Generating unique particle physics map...', progressEnd: 75, duration: 400 },
-                { status: 'Rendering initial 3D scene placeholder...', progressEnd: 85, duration: 300 },
-                { status: 'Assembling navigation and layout components...', progressEnd: 93, duration: 250 },
-                { status: 'Applying final visual polish and theme transitions...', progressEnd: 99, duration: 200 },
+                { status: 'Checking environment compatibility...', progressEnd: 48, duration: 200 },
+                { status: 'Loading configuration files...', progressEnd: 55, duration: 300 },
+                { status: 'Preparing interactive elements...', progressEnd: 65, duration: 400 },
+                { status: 'Creating winter effects...', progressEnd: 75, duration: 400 },
+                { status: 'Rendering main components...', progressEnd: 85, duration: 300 },
+                { status: 'Building page layout...', progressEnd: 93, duration: 250 },
+                { status: 'Applying finishing touches...', progressEnd: 99, duration: 200 },
             ];
-            
             for (const step of initializationSteps) {
-                // Update the status immediately before starting the progress sweep
                 updateLoading(currentProgress, step.status);
-                
-                // Smoothly update the progress bar to the step's end point
                 const stepsToTake = step.progressEnd - currentProgress;
                 if (stepsToTake > 0) {
-                    // Calculate a dynamic delay for smooth animation over the duration
                     const delayPerStep = step.duration / stepsToTake;
                     for (let i = currentProgress + 1; i <= step.progressEnd; i++) {
-                        // The status text stays the same, but the percentage updates frequently
                         updateLoading(i, step.status);
                         await new Promise(r => setTimeout(r, delayPerStep));
                     }
                 }
                 currentProgress = step.progressEnd;
             }
-            
-            // 4. Final initialization and reveal
             updateLoading(100, 'Launch successful. Welcome!');
-            
-            // Initialize the main components
             initKineticWelcome();
             initSnowfall();
-            startContinuousSnow();
-
-            // Give a brief moment before fading out
+            initTooltip();
+            const snowToggleButton = document.getElementById('snow-toggle-checkbox');
+            if (snowToggleButton) {
+                if (snowToggleButton.checked) startContinuousSnow();
+                snowToggleButton.addEventListener('change', toggleSnowfall);
+            }
             await new Promise(r => setTimeout(r, 200));
-
-            // Fade out loading screen and fade in content
             loadingScreen.style.opacity = '0';
             contentWrapper.style.opacity = '1';
-
-            // Remove loading screen after fade
             await new Promise(r => setTimeout(r, 500));
             loadingScreen.remove();
         }
 
-        // Start the loading sequence when the window loads
-        window.onload = function () {
-            runLoadingSequence(); 
-        };
+        window.onload = function () { runLoadingSequence(); };
     </script>
 </body>
 </html>
