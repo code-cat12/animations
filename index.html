@@ -3,19 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Icy Animations</title> <!-- Title updated to "Animations" -->
-    <!-- Favicon: Using a snowflake emoji (❄️) via inline SVG -->
+    <title>Icy Animations</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>❄️</text></svg>">
     
-    <!-- Load Tailwind CSS from CDN for instant styling --><script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Link to Inter font from Google Fonts (Universal) --><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap" rel="stylesheet">
     
     <script>
         tailwind.config = {
             theme: {
                 extend: {
-                    // Using Inter first, then falling back to the optimized system font stack (SF Pro, Segoe UI, etc.)
                     fontFamily: {
                         sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', '"Helvetica Neue"', 'Arial', 'sans-serif'],
                     },
@@ -24,61 +21,47 @@
         }
     </script>
     <style>
-        /* Ensures the body fills the entire viewport height and width */
         html, body {
             height: 100%;
             width: 100%;
             margin: 0;
             padding: 0;
-            overflow-x: hidden; /* Prevents horizontal scroll on small screens */
+            overflow-x: hidden;
         }
-        /* Custom CSS for the three-stop gradient: lighter red -> lighter purple -> lighter blue */
         .tri-gradient {
-            /* REVERTED: Back to a three-stop gradient: Red -> Blue -> Purple */
             background: linear-gradient(to right, 
-                #ef4444 0%,         /* Red-500 */
-                #60a5fa 50%,        /* Blue-400 */
-                #a78bfa 100%        /* Purple-400 */
+                #ef4444 0%,
+                #60a5fa 50%,
+                #a78bfa 100%
             );
-            /* --- PARALLAX EFFECT (Option 5) --- */
             background-attachment: fixed;
             background-size: cover;
         }
 
-        /* --- KINETIC HEADER STYLES --- */
         #kinetic-welcome span {
-            display: inline-block; /* Essential for individual transforms */
-            transition: transform 0.15s ease-out; /* Smooth movement */
-            will-change: transform; /* Performance optimization */
+            display: inline-block;
+            transition: transform 0.15s ease-out;
+            will-change: transform;
         }
 
-        /* NOTE: .text-outline-black class and style have been removed as requested. */
-        
-        /* --- SNOWFALL EFFECT STYLES --- */
-        
-        /* Keyframes for the falling animation */
         @keyframes fall {
             0% { top: -10vh; opacity: 0.8; }
-            100% { top: 110vh; opacity: 0; } /* INCREASED to 110vh so snowflakes fully exit the bottom */
+            100% { top: 110vh; opacity: 0; }
         }
 
-        /* Keyframes for the spinning animation */
         @keyframes spin {
             from { transform: rotate(0deg); }
             to { transform: rotate(360deg); }
         }
 
-        /* Base style for a single snowflake */
         .snowflake {
             position: fixed;
-            /* Color is now dynamic based on emoji, but text-shadow is kept for visibility */
             text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
-            pointer-events: none; /* Allows clicks to pass through */
+            pointer-events: none;
             user-select: none;
             z-index: 10; 
         }
 
-        /* --- BADGE PULSE STYLES --- */
         @keyframes pulse-light {
             0%, 100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7); }
             50% { box-shadow: 0 0 0 8px rgba(255, 255, 255, 0); }
@@ -86,352 +69,117 @@
         .pulse-badge {
             animation: pulse-light 2s infinite;
         }
-
-        /* --- LOADING SCREEN STYLES (Fancier Update) --- */
-        
-        /* New keyframe for subtle glow on the snowflake */
-        @keyframes subtle-glow {
-            0%, 100% { text-shadow: 0 0 8px rgba(255, 255, 255, 0.8); }
-            50% { text-shadow: 0 0 16px rgba(186, 230, 253, 1); } /* Light blue glow */
-        }
-        .loading-snowflake {
-            animation: subtle-glow 1.5s ease-in-out infinite;
-        }
-
-        #loading-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            /* Frosted glass effect: Dark background with heavy blur */
-            background-color: rgba(0, 0, 0, 0.75); 
-            backdrop-filter: blur(10px); 
-            z-index: 100; 
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            transition: opacity 0.5s ease-out; 
-        }
-        
-        #progress-bar-container {
-            width: 80%;
-            max-width: 400px;
-            background-color: rgba(255, 255, 255, 0.15); /* Lighter container */
-            border-radius: 9999px; 
-            height: 16px; /* Slightly taller bar */
-            overflow: hidden;
-            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
-        }
-
-        #progress-bar {
-            height: 100%;
-            width: 0%;
-            /* Gradient bar: Blue to Purple */
-            background: linear-gradient(to right, #60a5fa, #a78bfa); 
-            /* Smoother transition */
-            transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1); 
-            border-radius: 9999px;
-        }
-
-        /* --- SNOWFALL TOGGLE STYLES (New) --- */
-        .snow-toggle-container {
-            position: relative;
-            display: inline-block;
-            width: 48px; /* w-12 */
-            height: 24px; /* h-6 */
-        }
-
-        .snow-toggle-input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-
-        /* The slider track */
-        .snow-toggle-slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(255, 255, 255, 0.25); /* Light gray/white for OFF state */
-            transition: background-color .4s;
-            border-radius: 24px;
-        }
-
-        /* The thumb (using ::before) */
-        .snow-toggle-slider:before {
-            position: absolute;
-            content: "❄️"; /* Default icon (ON state) */
-            height: 20px;
-            width: 20px;
-            left: 2px;
-            bottom: 2px;
-            background-color: white;
-            transition: .4s transform;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 10px;
-            line-height: 1;
-        }
-
-        /* When checked (ON state) */
-        .snow-toggle-input:checked + .snow-toggle-slider {
-            background-color: #60a5fa; /* Tailwind Blue-400 for ON */
-        }
-
-        .snow-toggle-input:checked + .snow-toggle-slider:before {
-            transform: translateX(24px); 
-        }
-
-        /* When NOT checked (OFF state) */
-        .snow-toggle-input:not(:checked) + .snow-toggle-slider:before {
-            content: "🌧️"; /* Rain cloud for OFF state */
-        }
-
-        /* --- Custom Tooltip Styles --- */
-        .custom-tooltip {
-            position: absolute;
-            top: 100%; /* Position below the toggle */
-            right: 0;
-            transform: translateY(10px);
-            z-index: 60;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.2s, visibility 0.2s, transform 0.2s;
-            pointer-events: none;
-            width: max-content; /* Only take up the space needed */
-        }
-
-        .show-tooltip {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
-        }
-
-        /* Arrow for the tooltip */
-        .custom-tooltip::before {
-            content: "";
-            position: absolute;
-            top: -5px;
-            right: 12px;
-            border-width: 0 5px 5px 5px;
-            border-style: solid;
-            border-color: transparent transparent #1f2937 transparent; /* Dark gray to match tooltip bg */
-        }
     </style>
 </head>
-<!-- Applying new layout: flex flex-col min-h-screen ensures the footer is pushed to the bottom -->
 <body class="tri-gradient flex flex-col min-h-screen font-sans">
 
-    <!-- 1. LOADING SCREEN (Fancier version) -->
-    <div id="loading-screen">
-        
-        <!-- Snowflake moved to the top of the loading screen -->
-        <span class="mb-4 text-5xl loading-snowflake">❄️</span> 
-        
-        <!-- The process description is now the main title, with smaller text size -->
-        <p id="loading-status" class="text-white text-2xl sm:text-3xl font-extrabold mb-8 tracking-wider text-center">Initializing...</p>
-        
-        <!-- Progress Bar and Percentage below -->
-        <div class="flex flex-col items-center justify-center w-full max-w-lg px-4">
-            <div id="progress-bar-container" class="mb-4">
-                <div id="progress-bar"></div>
-            </div>
-            
-            <p id="loading-percentage" class="text-white text-xl font-bold">0%</p>
-        </div>
-    </div>
+    <!-- MAIN CONTENT WRAPPER -->
+    <div id="main-content-wrapper" class="flex flex-col min-h-screen w-full">
 
-    <!-- 2. MAIN CONTENT WRAPPER (Starts invisible, revealed after loading) -->
-    <div id="main-content-wrapper" class="opacity-0 transition-opacity duration-500 flex flex-col min-h-screen w-full">
-
-        <!-- TOP NAVIGATION BAR (Fixed, White Frosted, 45% Opaque / 55% Transparent) -->
+        <!-- TOP NAVIGATION BAR -->
         <nav class="fixed top-0 left-0 w-full z-50 bg-white/45 backdrop-blur-lg shadow-xl">
-            <!-- Restructured nav to place title on the left and elements on the right -->
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center py-2 relative">
                 
-                <!-- 1. Left (Brand Text - Now Left Aligned, Outline removed) -->
-                <div class="text-white text-base font-bold flex items-center">
+                <div class="flex items-center">
                     <span class="text-xl mr-2">❄️</span> 
-                    <a href="#" class="text-white hover:text-gray-300 transition duration-150 font-bold tracking-wider">@Icy's Winter Update</a>
+                    <a href="https://code-cat12.github.io/animations/project" class="text-white text-sm font-bold hover:text-gray-300 transition duration-150 tracking-wider">@Icy's Animations</a>
                 </div>
 
-                <!-- 2. Right (About Me and Snow Toggle) -->
                 <div class="flex items-center space-x-6">
-                    <!-- About Me Link - Updated to specific directory -->
                     <a href="https://code-cat12.github.io/animations/about-me" class="text-white text-sm font-bold hover:text-gray-300 transition duration-150 tracking-wider">
                         About Me
                     </a>
-
-                    <!-- Icy AI Link removed as requested -->
-
-                    <!-- Snow Toggle Switch and Tooltip -->
-                    <div id="toggle-container" class="relative">
-                        <label id="snow-toggle-label" class="snow-toggle-container" 
-                               title="Toggle Snow and Tree Animations" 
-                               aria-label="Toggle Snowfall Effect">
-                            <input type="checkbox" id="snow-toggle-checkbox" class="snow-toggle-input" checked>
-                            <span class="snow-toggle-slider"></span>
-                        </label>
-
-                        <!-- Custom Tooltip Element (Hidden by default) -->
-                        <div id="toggle-tooltip" class="custom-tooltip bg-gray-800 text-white text-xs font-medium py-1 px-3 rounded-lg shadow-xl">
-                            Toggle Snow/Tree Effects
-                        </div>
-                    </div>
                 </div>
-                
             </div>
         </nav>
 
-        <!-- MAIN CONTENT - Added flex-grow to take up remaining vertical space. Increased pt-16 to pt-20. -->
+        <!-- MAIN CONTENT -->
         <main class="pt-20 flex-grow flex flex-col items-center justify-center px-4">
             
-            <!-- NEW HERO SECTION: Interactive Welcome Title -->
-            <!-- mb-12 reduced to mb-8 -->
             <div class="text-center w-full mb-8">
-                <!-- NEW RELEASE DATE TEXT: Small, White, 50% Opcity, and Uppercase -->
-                <p class="text-white text-sm font-medium opacity-50 mb-4 tracking-widest uppercase">
-                    Officially Released
-                </p>
-
-                <!-- Container for the kinetic title (text injected by JS) -->
+                <!-- Version removed from here -->
                 <h1 id="kinetic-welcome" class="text-3xl sm:text-5xl font-extrabold text-white leading-tight tracking-tight drop-shadow-lg">
-                    <!-- Letters will be injected here -->
+                    <!-- Letters injected by JS -->
                 </h1>
             </div>
-            <!-- END NEW HERO SECTION -->
 
-            <!-- CONTAINER FOR ALL CARDS - ROW 1 (Forsaken & Icy) -->
-            <!-- Increased max-w-3xl to max-w-6xl and gap-8 to lg:gap-16 for desktop -->
-            <div class="flex flex-col lg:flex-row gap-8 lg:gap-16 max-w-6xl w-full mb-8">
+            <!-- CONTAINER FOR CARDS -->
+            <div class="flex flex-col lg:flex-row items-stretch justify-center gap-8 lg:gap-12 max-w-6xl w-full mb-8">
                 
-                <!-- Forsaken Animations Card (Vibrant Red to Black Gradient) -->
-                <a href="https://code-cat12.github.io/animations/forsaken" class="relative flex-1 block 
-                    transform hover:scale-[1.03] transition duration-300 ease-in-out 
-                    bg-gradient-to-tr from-red-600 to-black rounded-xl overflow-hidden shadow-2xl 
-                    hover:shadow-red-900/70 group border border-white/30 
-                    focus:ring-4 focus:ring-white/50 focus:outline-none">
-                    
-                    <!-- NEW BADGE (Option 4) - Now includes pulse-badge class -->
-                    <span class="absolute top-2 right-2 px-3 py-1 text-xs font-bold uppercase rounded-full bg-white text-red-600 shadow-md pulse-badge z-20">
-                        New
-                    </span>
-
-                    <!-- Banner Image (Dynamic Height to fit image content) -->
-                    <img src="https://staticg.sportskeeda.com/editor/2025/11/471bd-17619648050568-1920.jpg" 
-                        alt="Forsaken Animation Banner"
-                        class="w-full object-contain bg-gray-900 group-hover:opacity-85 transition duration-300"
-                        onerror="this.onerror=null;this.src='https://placehold.co/768x432/333333/ef4444?text=Forsaken+Animations%3A+Load+Failed';">
-                    
-                    <div class="p-4 text-center">
-                        <p class="text-white text-2xl font-bold tracking-wide drop-shadow-lg mb-1">
-                            Forsaken Animations
-                        </p>
-                        <p class="text-gray-300 text-sm font-light">
-                            Explore high-intensity combat choreography and custom rigs.
-                        </p>
-                    </div>
-                </a>
-
-                <!-- Icy Animations Card (Vibrant Blue to Purple Gradient) -->
-                <a href="https://code-cat12.github.io/animations/icy/v2/" class="flex-1 block 
-                    transform hover:scale-[1.03] transition duration-300 ease-in-out 
+                <!-- Icy Animations Card -->
+                <a href="https://code-cat12.github.io/animations/icy/v2/" class="flex-1 flex flex-col transform hover:scale-[1.03] transition duration-300 ease-in-out 
                     bg-gradient-to-tr from-blue-500 to-purple-700 rounded-xl overflow-hidden shadow-2xl 
                     hover:shadow-blue-900/70 group border border-white/30
                     focus:ring-4 focus:ring-white/50 focus:outline-none relative">
                     
-                    <!-- ADDED UPDATE BADGE - Includes pulse-badge class for consistency -->
                     <span class="absolute top-2 right-2 px-3 py-1 text-xs font-bold uppercase rounded-full bg-white text-blue-600 shadow-md z-20 pulse-badge">
                         Update!
                     </span>
 
-                    <!-- Banner Image (Dynamic Height to fit image content) -->
                     <img src="https://i.postimg.cc/Fzm43475/no-Filter.png" 
                         alt="Icy Animations Banner"
-                        class="w-full object-contain bg-gray-900 group-hover:opacity-85 transition duration-300"
-                        onerror="this.onerror=null;this.src='https://placehold.co/768x432/4c2f6d/60a5fa?text=Icy+Animations%3A+Load+Failed';">
+                        class="w-full h-48 sm:h-64 object-cover bg-gray-900 group-hover:opacity-85 transition duration-300"
+                        onerror="this.onerror=null;this.src='https://placehold.co/768x432/4c2f6d/60a5fa?text=Icy+Animations+Load+Failed';">
 
-                    <div class="p-4 text-center">
-                        <p class="text-white text-2xl font-bold tracking-wide drop-shadow-lg mb-1">
+                    <div class="p-3 text-center h-24 flex flex-col justify-center flex-grow">
+                        <p class="text-white text-xl font-bold tracking-wide drop-shadow-lg mb-0.5">
                             Icy Animations
                         </p>
-                        <p class="text-gray-300 text-sm font-light">
+                        <p class="text-gray-300 text-xs font-light leading-tight">
                             View seamless, chilling effects and unique character movements.
                         </p>
                     </div>
                 </a>
-            </div>
-            
-            <!-- CONTAINER FOR ALL CARDS - ROW 2 (Winter only - adjusted to be centered) -->
-            <!-- Increased max-w-3xl to max-w-6xl and gap-8 to lg:gap-16 for desktop -->
-            <div class="flex flex-col lg:flex-row gap-8 lg:gap-16 max-w-6xl w-full mb-8">
-                
-                <!-- Winter Animations Card (Now centered with mx-auto w-full lg:w-1/2, scaled relative to the new max-w-6xl) -->
-                <a href="https://code-cat12.github.io/animations/winter" class="relative block mx-auto w-full lg:w-1/2
+
+                <!-- Anime Animations Card -->
+                <a href="https://code-cat12.github.io/animations/winter" class="flex-1 flex flex-col relative
                     transform hover:scale-[1.03] transition duration-300 ease-in-out
-                    /* Card gradient: Teal-to-Yellow */
                     bg-gradient-to-tr from-teal-500 to-yellow-500 rounded-xl overflow-hidden shadow-2xl
-                    /* Hover shadow updated to match new gradient */
                     hover:shadow-yellow-700/70 group border border-white/30
                     focus:ring-4 focus:ring-white/50 focus:outline-none">
                     
-                    <!-- Badge updated to Limited Time -->
                     <span class="absolute top-2 right-2 px-3 py-1 text-xs font-bold uppercase rounded-full bg-white text-teal-500 shadow-md pulse-badge z-20">
-                        Limited Time
+                        Special Edition
                     </span>
 
-                    <!-- Banner Image (Dynamic Height to fit image content) -->
                     <img src="https://pbs.twimg.com/media/G5ozTKLacAIhB-m?format=jpg&name=large"
-                        alt="Winter Animations Banner"
-                        class="w-full object-contain bg-gray-900 group-hover:opacity-85 transition duration-300"
-                        onerror="this.onerror=null;this.src='https://placehold.co/768x432/333366/00cec9?text=Winter+Animations%3A+Load+Failed';">
+                        alt="Anime Animations Banner"
+                        class="w-full h-48 sm:h-64 object-cover bg-gray-900 group-hover:opacity-85 transition duration-300"
+                        onerror="this.onerror=null;this.src='https://placehold.co/768x432/333366/00cec9?text=Anime+Animations+Load+Failed';">
                     
-                    <div class="p-4 text-center">
-                        <!-- Title text is white -->
-                        <p class="text-white text-2xl font-bold tracking-wide mb-1">
-                            Winter Animations
+                    <div class="p-3 text-center h-24 flex flex-col justify-center flex-grow">
+                        <p class="text-white text-xl font-bold tracking-wide mb-0.5">
+                            Anime Animations
                         </p>
-                        <!-- Description text is white (Shortened by one word) -->
-                        <p class="text-white text-sm font-light">
-                            Seasonal effects including frosty combat and holiday character rigs.
+                        <p class="text-white text-xs font-light leading-tight">
+                            Cinematic anime-inspired sequences featuring exclusive high-octane visual effects.
                         </p>
                     </div>
                 </a>
-                
             </div>
             
         </main>
         
-        <!-- FOOTER SECTION - Pushed to the bottom by flex-grow on main. -->
-        <footer class="w-full py-4 text-center mt-6">
-            <!-- Link text changed to Releases and URL updated to the GitHub releases page -->
-            <a href="https://github.com/code-cat12/animations/releases" 
-               class="text-white hover:text-gray-300 transition duration-200 text-xs font-medium opacity-80 hover:opacity-100 tracking-wider">
-                Releases
-            </a>
+        <footer class="w-full py-6 text-center mt-auto flex flex-col items-center gap-2">
+            <div class="flex items-center space-x-4">
+                <a href="https://github.com/code-cat12/animations/releases" 
+                   class="text-white hover:text-gray-300 transition duration-200 text-xs font-medium opacity-80 hover:opacity-100 tracking-wider">
+                    Releases
+                </a>
+                <span class="text-white/40 text-xs">•</span>
+                <span class="text-white text-xs font-medium opacity-50 tracking-widest uppercase">
+                    v1.0.01
+                </span>
+            </div>
         </footer>
-    </div> <!-- END main-content-wrapper -->
+    </div> 
 
     <script>
-        // Global variables for snow control
-        let snowIntervalId = null;
-        let isSnowing = false; 
-        
-        // --- KINETIC WELCOME HEADER JAVASCRIPT ---
         function initKineticWelcome() {
             const container = document.getElementById('kinetic-welcome');
             if (!container) return;
-
             const text = "Welcome"; 
             const letters = [];
-
             text.split('').forEach(char => {
                 const span = document.createElement('span');
                 span.textContent = char === ' ' ? '\u00A0' : char; 
@@ -439,10 +187,8 @@
                 container.appendChild(span);
                 letters.push(span);
             });
-
             const repulsionStrength = 25; 
             const repulsionRadius = 75;  
-
             document.addEventListener('mousemove', (e) => {
                 letters.forEach(span => {
                     const rect = span.getBoundingClientRect();
@@ -451,7 +197,6 @@
                     const dx = e.clientX - letterX;
                     const dy = e.clientY - letterY;
                     const distance = Math.sqrt(dx * dx + dy * dy);
-
                     let translateY = 0;
                     if (distance < repulsionRadius) {
                         const repulsionFactor = 1 - (distance / repulsionRadius);
@@ -463,14 +208,11 @@
             });
         }
         
-        // --- SNOWFALL EFFECT JAVASCRIPT ---
         const initialFlakeCount = 43; 
-        
         function createSnowflake(isInitial = false) {
             const snowflake = document.createElement('span');
             snowflake.classList.add('snowflake');
-            const element = Math.random() < 0.5 ? '❄️' : '🎄'; 
-            snowflake.innerHTML = element;
+            snowflake.innerHTML = '❄️'; 
             snowflake.style.left = Math.random() * 100 + 'vw';
             snowflake.style.fontSize = (Math.random() * 0.8 + 1.2) + 'rem'; 
             const fallDuration = (Math.random() * 10 + 5).toFixed(2);
@@ -486,124 +228,16 @@
         }
 
         function initSnowfall() {
-            if (document.querySelectorAll('.snowflake').length === 0) {
-                for (let i = 0; i < initialFlakeCount; i++) {
-                    createSnowflake(true); 
-                }
+            for (let i = 0; i < initialFlakeCount; i++) {
+                createSnowflake(true); 
             }
+            setInterval(() => createSnowflake(false), 700);
         }
 
-        function startContinuousSnow() {
-            if (snowIntervalId === null) {
-                snowIntervalId = setInterval(() => createSnowflake(false), 700); 
-                isSnowing = true;
-            }
-        }
-        
-        function toggleSnowfall() {
-            const checkbox = document.getElementById('snow-toggle-checkbox');
-            if (checkbox.checked) {
-                startContinuousSnow();
-                document.querySelectorAll('.snowflake').forEach(flake => { flake.style.display = 'block'; });
-            } else {
-                clearInterval(snowIntervalId);
-                snowIntervalId = null;
-                isSnowing = false;
-                document.querySelectorAll('.snowflake').forEach(flake => { flake.style.display = 'none'; });
-            }
-        }
-
-        function initTooltip() {
-            const toggleLabel = document.getElementById('snow-toggle-label');
-            const tooltip = document.getElementById('toggle-tooltip');
-            toggleLabel.addEventListener('mouseenter', () => { tooltip.classList.add('show-tooltip'); });
-            toggleLabel.addEventListener('mouseleave', () => { setTimeout(() => { tooltip.classList.remove('show-tooltip'); }, 100); });
-            toggleLabel.addEventListener('touchstart', () => { tooltip.classList.add('show-tooltip'); });
-            toggleLabel.addEventListener('touchend', () => { setTimeout(() => { tooltip.classList.remove('show-tooltip'); }, 1500); });
-        }
-
-        // --- LOADING SCREEN JAVASCRIPT LOGIC ---
-        function updateLoading(progress, status) {
-            const progressBar = document.getElementById('progress-bar');
-            const loadingPercentage = document.getElementById('loading-percentage');
-            const loadingStatus = document.getElementById('loading-status');
-            const clampedProgress = Math.max(0, Math.min(100, progress));
-            progressBar.style.width = `${clampedProgress}%`;
-            loadingPercentage.textContent = `${Math.round(clampedProgress)}%`;
-            loadingStatus.textContent = status;
-        }
-
-        function waitForImages(imageUrls, startProgress, endProgress) {
-            return new Promise(resolve => {
-                let loadedCount = 0;
-                const totalCount = imageUrls.length;
-                if (totalCount === 0) { resolve(); return; }
-                const progressRange = endProgress - startProgress;
-                const checkCompletion = () => {
-                    loadedCount++;
-                    const progress = Math.floor((loadedCount / totalCount) * progressRange) + startProgress; 
-                    updateLoading(progress, `Downloading resources (${loadedCount}/${totalCount})...`);
-                    if (loadedCount === totalCount) resolve();
-                };
-                imageUrls.forEach(url => {
-                    const img = new Image();
-                    img.onload = checkCompletion;
-                    img.onerror = checkCompletion; 
-                    img.src = url;
-                });
-            });
-        }
-
-        async function runLoadingSequence() {
-            const loadingScreen = document.getElementById('loading-screen');
-            const contentWrapper = document.getElementById('main-content-wrapper');
-            updateLoading(0, 'Establishing secure connection...');
-            await new Promise(r => setTimeout(r, 400));
-            updateLoading(5, 'Launch sequence initiated.');
-            await new Promise(r => setTimeout(r, 200));
-            const imageElements = document.querySelectorAll('main img');
-            const imageUrls = Array.from(imageElements).map(img => img.src).filter(src => src && !src.includes('placehold.co'));
-            updateLoading(10, 'Preparing critical media assets...');
-            await waitForImages(imageUrls, 10, 40);
-            let currentProgress = 40;
-            const initializationSteps = [
-                { status: 'Checking environment compatibility...', progressEnd: 48, duration: 200 },
-                { status: 'Loading configuration files...', progressEnd: 55, duration: 300 },
-                { status: 'Preparing interactive elements...', progressEnd: 65, duration: 400 },
-                { status: 'Creating winter effects...', progressEnd: 75, duration: 400 },
-                { status: 'Rendering main components...', progressEnd: 85, duration: 300 },
-                { status: 'Building page layout...', progressEnd: 93, duration: 250 },
-                { status: 'Applying finishing touches...', progressEnd: 99, duration: 200 },
-            ];
-            for (const step of initializationSteps) {
-                updateLoading(currentProgress, step.status);
-                const stepsToTake = step.progressEnd - currentProgress;
-                if (stepsToTake > 0) {
-                    const delayPerStep = step.duration / stepsToTake;
-                    for (let i = currentProgress + 1; i <= step.progressEnd; i++) {
-                        updateLoading(i, step.status);
-                        await new Promise(r => setTimeout(r, delayPerStep));
-                    }
-                }
-                currentProgress = step.progressEnd;
-            }
-            updateLoading(100, 'Launch successful. Welcome!');
+        window.onload = function () { 
             initKineticWelcome();
             initSnowfall();
-            initTooltip();
-            const snowToggleButton = document.getElementById('snow-toggle-checkbox');
-            if (snowToggleButton) {
-                if (snowToggleButton.checked) startContinuousSnow();
-                snowToggleButton.addEventListener('change', toggleSnowfall);
-            }
-            await new Promise(r => setTimeout(r, 200));
-            loadingScreen.style.opacity = '0';
-            contentWrapper.style.opacity = '1';
-            await new Promise(r => setTimeout(r, 500));
-            loadingScreen.remove();
-        }
-
-        window.onload = function () { runLoadingSequence(); };
+        };
     </script>
 </body>
 </html>
