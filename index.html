@@ -44,22 +44,28 @@
             will-change: transform;
         }
 
+        /* Falling animation */
         @keyframes fall {
-            0% { top: -10vh; opacity: 0.8; }
-            100% { top: 110vh; opacity: 0; }
+            0% { 
+                transform: translateY(-10vh); 
+                opacity: 0; 
+            }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { 
+                transform: translateY(110vh); 
+                opacity: 0; 
+            }
         }
 
-        @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        .snowflake {
+        .ice-particle {
             position: fixed;
-            text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+            top: 0;
             pointer-events: none;
             user-select: none;
-            z-index: 10; 
+            z-index: 5;
+            will-change: transform;
+            filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.4));
         }
 
         @keyframes pulse-light {
@@ -74,30 +80,12 @@
 <body class="tri-gradient flex flex-col min-h-screen font-sans">
 
     <!-- MAIN CONTENT WRAPPER -->
-    <div id="main-content-wrapper" class="flex flex-col min-h-screen w-full">
-
-        <!-- TOP NAVIGATION BAR -->
-        <nav class="fixed top-0 left-0 w-full z-50 bg-white/45 backdrop-blur-lg shadow-xl">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center py-2 relative">
-                
-                <div class="flex items-center">
-                    <span class="text-xl mr-2">❄️</span> 
-                    <a href="https://code-cat12.github.io/animations/project" class="text-white text-sm font-bold hover:text-gray-300 transition duration-150 tracking-wider">@Icy's Animations</a>
-                </div>
-
-                <div class="flex items-center space-x-6">
-                    <a href="https://code-cat12.github.io/animations/about-me" class="text-white text-sm font-bold hover:text-gray-300 transition duration-150 tracking-wider">
-                        About Me
-                    </a>
-                </div>
-            </div>
-        </nav>
+    <div id="main-content-wrapper" class="flex flex-col min-h-screen w-full relative">
 
         <!-- MAIN CONTENT -->
-        <main class="pt-20 flex-grow flex flex-col items-center justify-center px-4">
+        <main class="flex-grow flex flex-col items-center justify-center px-4 py-12 z-20">
             
             <div class="text-center w-full mb-8">
-                <!-- Version removed from here -->
                 <h1 id="kinetic-welcome" class="text-3xl sm:text-5xl font-extrabold text-white leading-tight tracking-tight drop-shadow-lg">
                     <!-- Letters injected by JS -->
                 </h1>
@@ -107,7 +95,7 @@
             <div class="flex flex-col lg:flex-row items-stretch justify-center gap-8 lg:gap-12 max-w-6xl w-full mb-8">
                 
                 <!-- Icy Animations Card -->
-                <a href="https://code-cat12.github.io/animations/icy/" class="flex-1 flex flex-col transform hover:scale-[1.03] transition duration-300 ease-in-out 
+                <a href="https://code-cat12.github.io/animations/icy/v2/" class="flex-1 flex flex-col transform hover:scale-[1.03] transition duration-300 ease-in-out 
                     bg-gradient-to-tr from-blue-500 to-purple-700 rounded-xl overflow-hidden shadow-2xl 
                     hover:shadow-blue-900/70 group border border-white/30
                     focus:ring-4 focus:ring-white/50 focus:outline-none relative">
@@ -126,13 +114,13 @@
                             Icy Animations
                         </p>
                         <p class="text-gray-300 text-xs font-light leading-tight">
-                            View seamless, chilling effects and unique character movements.
+                            View seamless, chilling effects and unique character movements made by Icy himself.
                         </p>
                     </div>
                 </a>
 
                 <!-- Anime Animations Card -->
-                <a href="https://code-cat12.github.io/animations/anime" class="flex-1 flex flex-col relative
+                <a href="https://code-cat12.github.io/animations/winter" class="flex-1 flex flex-col relative
                     transform hover:scale-[1.03] transition duration-300 ease-in-out
                     bg-gradient-to-tr from-teal-500 to-yellow-500 rounded-xl overflow-hidden shadow-2xl
                     hover:shadow-yellow-700/70 group border border-white/30
@@ -160,7 +148,7 @@
             
         </main>
         
-        <footer class="w-full py-6 text-center mt-auto flex flex-col items-center gap-2">
+        <footer class="w-full py-6 text-center mt-auto flex flex-col items-center gap-2 z-20">
             <div class="flex items-center space-x-4">
                 <a href="https://github.com/code-cat12/animations/releases" 
                    class="text-white hover:text-gray-300 transition duration-200 text-xs font-medium opacity-80 hover:opacity-100 tracking-wider">
@@ -168,7 +156,7 @@
                 </a>
                 <span class="text-white/40 text-xs">•</span>
                 <span class="text-white text-xs font-medium opacity-50 tracking-widest uppercase">
-                    v1.0.01
+                    v1.1.01
                 </span>
             </div>
         </footer>
@@ -207,36 +195,48 @@
                 });
             });
         }
-        
-        const initialFlakeCount = 43; 
-        function createSnowflake(isInitial = false) {
-            const snowflake = document.createElement('span');
-            snowflake.classList.add('snowflake');
-            snowflake.innerHTML = '❄️'; 
-            snowflake.style.left = Math.random() * 100 + 'vw';
-            snowflake.style.fontSize = (Math.random() * 0.8 + 1.2) + 'rem'; 
-            const fallDuration = (Math.random() * 10 + 5).toFixed(2);
-            const spinDuration = (Math.random() * 20 + 10).toFixed(2);
-            let delay = (Math.random() * 5).toFixed(2); 
+
+        function createIceParticle(isInitial = false) {
+            const particle = document.createElement('div');
+            particle.className = 'ice-particle';
+            
+            const types = ['❄️', '🧊'];
+            particle.textContent = types[Math.floor(Math.random() * types.length)];
+            
+            const size = Math.random() * 1 + 0.8; 
+            // Made faster: duration reduced from 15-25s to 6-12s
+            const duration = Math.random() * 6 + 6; 
+            
+            particle.style.left = Math.random() * 100 + 'vw';
+            particle.style.fontSize = `${size}rem`;
+            
+            // Animation is linear for consistent speed
+            particle.style.animation = `fall ${duration}s linear forwards`;
+            
             if (isInitial) {
-                const maxFallDuration = 15;
-                delay = -(Math.random() * maxFallDuration).toFixed(2);
+                const offset = Math.random() * -duration;
+                particle.style.animationDelay = `${offset}s`;
             }
-            snowflake.style.animation = `fall ${fallDuration}s linear infinite, spin ${spinDuration}s linear infinite`;
-            snowflake.style.animationDelay = `${delay}s`;
-            document.body.appendChild(snowflake);
+
+            document.body.appendChild(particle);
+
+            setTimeout(() => {
+                particle.remove();
+            }, duration * 1000);
         }
 
-        function initSnowfall() {
-            for (let i = 0; i < initialFlakeCount; i++) {
-                createSnowflake(true); 
+        function initIceFall() {
+            // Initial burst
+            for (let i = 0; i < 30; i++) {
+                createIceParticle(true);
             }
-            setInterval(() => createSnowflake(false), 700);
+            // Steady flow - increased frequency slightly for faster feel
+            setInterval(() => createIceParticle(false), 500);
         }
 
         window.onload = function () { 
             initKineticWelcome();
-            initSnowfall();
+            initIceFall();
         };
     </script>
 </body>
