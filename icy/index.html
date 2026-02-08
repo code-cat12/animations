@@ -3,36 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Favicon changed to a snowflake emoji -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>❄️</text></svg>">
-    <!-- Updated Browser Tab Title --><title>Icy Animations</title>
-    <!-- Load Tailwind CSS from CDN --><script src="https://cdn.tailwindcss.com"></script>
+    <title>Icy Animations Gallery</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Ensuring Inter is preferred */
         body { 
             font-family: "Inter", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+            background-image: url('https://64.media.tumblr.com/d4b62ada31d7ca6031325908e4ffb175/6c038ee946b7aa17-36/s2048x3072/45d199da966eb93c8e44103db277b7f68b267556.gif');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
         }
-        /* Custom styles for the responsive video placeholder container */
-        .video-placeholder-container {
-            position: relative; 
-            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
-            height: 0;
-            background-color: #94A3B8; /* Slate-400 background for a cold/icy feel */
+
+        /* Glassmorphism Effect */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 1.5rem;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        .glass-header {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
     </style>
 </head>
-<!-- Background: Smooth blue-to-purple gradient --><body class="bg-gradient-to-r from-blue-700 to-purple-800 min-h-screen font-sans">
+<body class="min-h-screen font-sans">
     
-    <!-- Main Content Container --><div class="container mx-auto p-4 sm:p-8 lg:p-12">
+    <div class="container mx-auto p-4 sm:p-8 lg:p-12">
 
         <!-- Header Section -->
-        <header class="text-center mb-6 py-6 bg-white/90 backdrop-blur-sm rounded-xl shadow-2xl">
-            <!-- Updated Main Heading Text to blue -->
-            <h1 class="text-4xl sm:text-5xl font-extrabold text-blue-700 tracking-tight">
+        <header class="text-center mb-10 py-8 glass-header rounded-2xl shadow-2xl">
+            <h1 class="text-4xl sm:text-5xl font-extrabold text-blue-800 tracking-tight">
                 Icy Animations
             </h1>
-            <!-- Text color uses darker gray -->
-            <p class="mt-2 text-xl text-gray-700">
+            <p class="mt-2 text-xl text-blue-900/80 font-medium">
                 Explore our collection of high-energy action and comedy animation shorts!
             </p>
         </header>
@@ -40,91 +50,67 @@
         <!-- Video Grid -->
         <main class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
 
-            <!-- Video 1 - Jumpshare Embed (Live) -->
-            <div class="bg-white p-4 rounded-xl shadow-xl transition hover:shadow-2xl duration-300">
-                <h2 class="text-xl font-semibold mb-3 text-blue-600">Animation Short I: Backrooms Jumpstyle</h2>
-                <!-- Video Embed (16:9 Aspect Ratio) -->
-                <div style="position: relative; padding-bottom: 56.25%; height: 0;" class="rounded-lg overflow-hidden">
-                    <iframe id="js_video_iframe" src="https://jumpshare.com/embed/WeWshCzkWUEdqaU3VfGZ" 
-                            frameborder="0" 
-                            webkitallowfullscreen 
-                            mozallowfullscreen 
-                            allowfullscreen 
+            <!-- Video 1 -->
+            <div class="glass-card p-5 transition hover:scale-[1.02] duration-300">
+                <h2 class="text-xl font-bold mb-4 text-white drop-shadow-md">01. Backrooms Jumpstyle</h2>
+                <div style="position: relative; padding-bottom: 56.25%; height: 0;" class="rounded-xl overflow-hidden shadow-inner">
+                    <iframe src="https://jumpshare.com/embed/WeWshCzkWUEdqaU3VfGZ" 
+                            frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen 
                             style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;">
                     </iframe>
                 </div>
             </div>
 
-            <!-- Video 2 - Jumpshare Embed (Live) -->
-            <div class="bg-white p-4 rounded-xl shadow-xl transition hover:shadow-2xl duration-300">
-                <h2 class="text-xl font-semibold mb-3 text-blue-600">Animation Short II: Strategy</h2>
-                <!-- Video Embed (16:9 Aspect Ratio) -->
-                <div style="position: relative; padding-bottom: 56.25%; height: 0;" class="rounded-lg overflow-hidden">
-                    <iframe id="js_video_iframe" src="https://jumpshare.com/embed/BvVhvELnNPGa8zjUxocK" 
-                            frameborder="0" 
-                            webkitallowfullscreen 
-                            mozallowfullscreen 
-                            allowfullscreen 
+            <!-- Video 2 -->
+            <div class="glass-card p-5 transition hover:scale-[1.02] duration-300">
+                <h2 class="text-xl font-bold mb-4 text-white drop-shadow-md">02. Strategy</h2>
+                <div style="position: relative; padding-bottom: 56.25%; height: 0;" class="rounded-xl overflow-hidden shadow-inner">
+                    <iframe src="https://jumpshare.com/embed/BvVhvELnNPGa8zjUxocK" 
+                            frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen 
                             style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;">
                     </iframe>
                 </div>
             </div>
 
-            <!-- Video 3 - Jumpshare Embed (Live) -->
-            <div class="bg-white p-4 rounded-xl shadow-xl transition hover:shadow-2xl duration-300">
-                <h2 class="text-xl font-semibold mb-3 text-blue-600">Animation Short III: All My Fellas (NEW!)</h2>
-                <!-- Video Embed (16:9 Aspect Ratio) -->
-                <div style="position: relative; padding-bottom: 56.25%; height: 0;" class="rounded-lg overflow-hidden">
-                    <iframe id="js_video_iframe" src="https://jumpshare.com/embed/2laDeKMNbUdFiVox1dDU" 
-                            frameborder="0" 
-                            webkitallowfullscreen 
-                            mozallowfullscreen 
-                            allowfullscreen 
+            <!-- Video 3 -->
+            <div class="glass-card p-5 transition hover:scale-[1.02] duration-300">
+                <h2 class="text-xl font-bold mb-4 text-white drop-shadow-md">03. All My Fellas (NEW!)</h2>
+                <div style="position: relative; padding-bottom: 56.25%; height: 0;" class="rounded-xl overflow-hidden shadow-inner">
+                    <iframe src="https://jumpshare.com/embed/2laDeKMNbUdFiVox1dDU" 
+                            frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen 
                             style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;">
                     </iframe>
                 </div>
             </div>
 
-            <!-- Video 4 - Jumpshare Embed (Live) -->
-            <div class="bg-white p-4 rounded-xl shadow-xl transition hover:shadow-2xl duration-300">
-                <h2 class="text-xl font-semibold mb-3 text-blue-600">Animation Short IV: Nonchalant Catch</h2>
-                <!-- Video Embed (16:9 Aspect Ratio) -->
-                <div style="position: relative; padding-bottom: 56.25%; height: 0;" class="rounded-lg overflow-hidden">
-                    <iframe id="js_video_iframe" src="https://jumpshare.com/embed/MEePcT9Rh53uw9QZr8PB" 
-                            frameborder="0" 
-                            webkitallowfullscreen 
-                            mozallowfullscreen 
-                            allowfullscreen 
+            <!-- Video 4 -->
+            <div class="glass-card p-5 transition hover:scale-[1.02] duration-300">
+                <h2 class="text-xl font-bold mb-4 text-white drop-shadow-md">04. Nonchalant Catch</h2>
+                <div style="position: relative; padding-bottom: 56.25%; height: 0;" class="rounded-xl overflow-hidden shadow-inner">
+                    <iframe src="https://jumpshare.com/embed/MEePcT9Rh53uw9QZr8PB" 
+                            frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen 
                             style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;">
                     </iframe>
                 </div>
             </div>
             
-            <!-- Video 5 - Jumpshare Embed (Live) -->
-            <div class="bg-white p-4 rounded-xl shadow-xl transition hover:shadow-2xl duration-300">
-                <h2 class="text-xl font-semibold mb-3 text-blue-600">Animation Short V: This Is Your Liver</h2>
-                <!-- Video Embed (16:9 Aspect Ratio) -->
-                <div style="position: relative; padding-bottom: 56.25%; height: 0;" class="rounded-lg overflow-hidden">
-                    <iframe id="js_video_iframe" src="https://jumpshare.com/embed/7b6YJiGJ6FhqKmPLK6xp" 
-                            frameborder="0" 
-                            webkitallowfullscreen 
-                            mozallowfullscreen 
-                            allowfullscreen 
+            <!-- Video 5 -->
+            <div class="glass-card p-5 transition hover:scale-[1.02] duration-300">
+                <h2 class="text-xl font-bold mb-4 text-white drop-shadow-md">05. This Is Your Liver</h2>
+                <div style="position: relative; padding-bottom: 56.25%; height: 0;" class="rounded-xl overflow-hidden shadow-inner">
+                    <iframe src="https://jumpshare.com/embed/7b6YJiGJ6FhqKmPLK6xp" 
+                            frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen 
                             style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;">
                     </iframe>
                 </div>
             </div>
 
-            <!-- Video 6 - Jumpshare Embed (Live) -->
-            <div class="bg-white p-4 rounded-xl shadow-xl transition hover:shadow-2xl duration-300">
-                <h2 class="text-xl font-semibold mb-3 text-blue-600">Animation Short VI: Raging</h2>
-                <!-- Video Embed (16:9 Aspect Ratio) -->
-                <div style="position: relative; padding-bottom: 56.25%; height: 0;" class="rounded-lg overflow-hidden">
-                    <iframe id="js_video_iframe" src="https://jumpshare.com/embed/sbbtc60mvD1CuokmFBHf" 
-                            frameborder="0" 
-                            webkitallowfullscreen 
-                            mozallowfullscreen 
-                            allowfullscreen 
+            <!-- Video 6 -->
+            <div class="glass-card p-5 transition hover:scale-[1.02] duration-300">
+                <h2 class="text-xl font-bold mb-4 text-white drop-shadow-md">06. Raging</h2>
+                <div style="position: relative; padding-bottom: 56.25%; height: 0;" class="rounded-xl overflow-hidden shadow-inner">
+                    <iframe src="https://jumpshare.com/embed/sbbtc60mvD1CuokmFBHf" 
+                            frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen 
                             style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;">
                     </iframe>
                 </div>
@@ -133,16 +119,14 @@
         </main>
 
         <!-- Footer -->
-        <footer class="text-center pt-6 border-t border-blue-400">
-            <!-- Updated border and link colors to blue -->
-            <p class="text-gray-500 text-sm">
+        <footer class="text-center pt-8 border-t border-white/20">
+            <p class="text-white font-medium text-sm drop-shadow-md">
                 Credits: 
-                @bestie_,
-                @lana_yt,
-                <a href= "https://www.youtube.com/@VanilBean/" target="_blank" class="text-blue-600 hover:text-blue-700 font-semibold">@vanilbean</a>,
-                <a href="https://www.youtube.com/@hhazem" target="_blank" class="text-blue-600 hover:text-blue-700 font-semibold">@haz3mn</a>,
-                <a href="https://www.youtube.com/@Kyle_YT" target="_blank" class="text-blue-600 hover:text-blue-700 font-semibold">@kyle_yt</a>
-                | All rights reserved.
+                <span class="opacity-90">@bestie_, @lana_yt,</span>
+                <a href="https://www.youtube.com/@VanilBean/" target="_blank" class="underline decoration-blue-300 hover:text-blue-200">@vanilbean</a>,
+                <a href="https://www.youtube.com/@hhazem" target="_blank" class="underline decoration-blue-300 hover:text-blue-200">@haz3mn</a>,
+                <a href="https://www.youtube.com/@Kyle_YT" target="_blank" class="underline decoration-blue-300 hover:text-blue-200">@kyle_yt</a>
+                <span class="block mt-2 opacity-75">| All rights reserved.</span>
             </p>
         </footer>
 
