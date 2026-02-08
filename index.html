@@ -28,14 +28,24 @@
             padding: 0;
             overflow-x: hidden;
         }
-        .tri-gradient {
-            background: linear-gradient(to right, 
-                #ef4444 0%,
-                #60a5fa 50%,
-                #a78bfa 100%
-            );
-            background-attachment: fixed;
+        
+        /* Updated background with the requested GIF */
+        .gif-background {
+            background: url('https://i.redd.it/4n3saz2c3nib1.gif') no-repeat center center fixed;
             background-size: cover;
+            position: relative;
+        }
+
+        /* Overlay to ensure text remains legible */
+        .background-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.2); /* Subtle dark tint */
+            pointer-events: none;
+            z-index: 1;
         }
 
         #kinetic-welcome span {
@@ -65,7 +75,7 @@
             user-select: none;
             z-index: 5;
             will-change: transform;
-            filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.4));
+            filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.6));
         }
 
         @keyframes pulse-light {
@@ -77,16 +87,17 @@
         }
     </style>
 </head>
-<body class="tri-gradient flex flex-col min-h-screen font-sans">
+<body class="gif-background flex flex-col min-h-screen font-sans">
+    <div class="background-overlay"></div>
 
     <!-- MAIN CONTENT WRAPPER -->
-    <div id="main-content-wrapper" class="flex flex-col min-h-screen w-full relative">
+    <div id="main-content-wrapper" class="flex flex-col min-h-screen w-full relative z-10">
 
         <!-- MAIN CONTENT -->
-        <main class="flex-grow flex flex-col items-center justify-center px-4 py-12 z-20">
+        <main class="flex-grow flex flex-col items-center justify-center px-4 py-12">
             
-            <div class="text-center w-full mb-8">
-                <h1 id="kinetic-welcome" class="text-3xl sm:text-5xl font-extrabold text-white leading-tight tracking-tight drop-shadow-lg">
+            <div class="text-center w-full mb-10">
+                <h1 id="kinetic-welcome" class="text-4xl sm:text-6xl font-extrabold text-white leading-tight tracking-tight drop-shadow-[0_5px_15px_rgba(0,0,0,0.5)]">
                     <!-- Letters injected by JS -->
                 </h1>
             </div>
@@ -95,9 +106,9 @@
             <div class="flex flex-col lg:flex-row items-stretch justify-center gap-8 lg:gap-12 max-w-6xl w-full mb-8">
                 
                 <!-- Icy Animations Card -->
-                <a href="https://code-cat12.github.io/animations/icy/" class="flex-1 flex flex-col transform hover:scale-[1.03] transition duration-300 ease-in-out 
-                    bg-gradient-to-tr from-blue-500 to-purple-700 rounded-xl overflow-hidden shadow-2xl 
-                    hover:shadow-blue-900/70 group border border-white/30
+                <a href="https://code-cat12.github.io/animations/icy/v2/" class="flex-1 flex flex-col transform hover:scale-[1.03] transition duration-300 ease-in-out 
+                    bg-gradient-to-tr from-blue-600/90 to-purple-800/90 backdrop-blur-sm rounded-xl overflow-hidden shadow-2xl 
+                    hover:shadow-blue-500/50 group border border-white/20
                     focus:ring-4 focus:ring-white/50 focus:outline-none relative">
                     
                     <span class="absolute top-2 right-2 px-3 py-1 text-xs font-bold uppercase rounded-full bg-white text-blue-600 shadow-md z-20 pulse-badge">
@@ -109,24 +120,24 @@
                         class="w-full h-48 sm:h-64 object-cover bg-gray-900 group-hover:opacity-85 transition duration-300"
                         onerror="this.onerror=null;this.src='https://placehold.co/768x432/4c2f6d/60a5fa?text=Icy+Animations+Load+Failed';">
 
-                    <div class="p-3 text-center h-24 flex flex-col justify-center flex-grow">
-                        <p class="text-white text-xl font-bold tracking-wide drop-shadow-lg mb-0.5">
+                    <div class="p-4 text-center h-28 flex flex-col justify-center flex-grow">
+                        <p class="text-white text-2xl font-bold tracking-wide drop-shadow-md mb-1">
                             Icy Animations
                         </p>
-                        <p class="text-gray-300 text-xs font-light leading-tight">
+                        <p class="text-blue-100 text-sm font-medium leading-tight opacity-90">
                             View seamless, chilling effects and unique character movements made by Icy himself.
                         </p>
                     </div>
                 </a>
 
                 <!-- Anime Animations Card -->
-                <a href="https://code-cat12.github.io/animations/anime" class="flex-1 flex flex-col relative
+                <a href="https://code-cat12.github.io/animations/winter" class="flex-1 flex flex-col relative
                     transform hover:scale-[1.03] transition duration-300 ease-in-out
-                    bg-gradient-to-tr from-teal-500 to-yellow-500 rounded-xl overflow-hidden shadow-2xl
-                    hover:shadow-yellow-700/70 group border border-white/30
+                    bg-gradient-to-tr from-teal-600/90 to-emerald-800/90 backdrop-blur-sm rounded-xl overflow-hidden shadow-2xl
+                    hover:shadow-teal-500/50 group border border-white/20
                     focus:ring-4 focus:ring-white/50 focus:outline-none">
                     
-                    <span class="absolute top-2 right-2 px-3 py-1 text-xs font-bold uppercase rounded-full bg-white text-teal-500 shadow-md pulse-badge z-20">
+                    <span class="absolute top-2 right-2 px-3 py-1 text-xs font-bold uppercase rounded-full bg-white text-teal-600 shadow-md pulse-badge z-20">
                         Special Edition
                     </span>
 
@@ -135,11 +146,11 @@
                         class="w-full h-48 sm:h-64 object-cover bg-gray-900 group-hover:opacity-85 transition duration-300"
                         onerror="this.onerror=null;this.src='https://placehold.co/768x432/333366/00cec9?text=Anime+Animations+Load+Failed';">
                     
-                    <div class="p-3 text-center h-24 flex flex-col justify-center flex-grow">
-                        <p class="text-white text-xl font-bold tracking-wide mb-0.5">
+                    <div class="p-4 text-center h-28 flex flex-col justify-center flex-grow">
+                        <p class="text-white text-2xl font-bold tracking-wide drop-shadow-md mb-1">
                             Anime Animations
                         </p>
-                        <p class="text-white text-xs font-light leading-tight">
+                        <p class="text-teal-50 text-sm font-medium leading-tight opacity-90">
                             Cinematic anime-inspired sequences featuring exclusive high-octane visual effects.
                         </p>
                     </div>
@@ -148,14 +159,14 @@
             
         </main>
         
-        <footer class="w-full py-6 text-center mt-auto flex flex-col items-center gap-2 z-20">
+        <footer class="w-full py-6 text-center mt-auto flex flex-col items-center gap-2">
             <div class="flex items-center space-x-4">
                 <a href="https://github.com/code-cat12/animations/releases" 
-                   class="text-white hover:text-gray-300 transition duration-200 text-xs font-medium opacity-80 hover:opacity-100 tracking-wider">
+                   class="text-white hover:text-blue-300 transition duration-200 text-sm font-bold drop-shadow-md">
                     Releases
                 </a>
                 <span class="text-white/40 text-xs">•</span>
-                <span class="text-white text-xs font-medium opacity-50 tracking-widest uppercase">
+                <span class="text-white text-sm font-bold tracking-widest uppercase drop-shadow-md">
                     v1.1.01
                 </span>
             </div>
@@ -171,12 +182,13 @@
             text.split('').forEach(char => {
                 const span = document.createElement('span');
                 span.textContent = char === ' ' ? '\u00A0' : char; 
-                span.classList.add('bg-clip-text', 'text-transparent', 'bg-gradient-to-r', 'from-red-300', 'to-green-300');
+                // Increased contrast for the welcome text
+                span.classList.add('bg-clip-text', 'text-transparent', 'bg-gradient-to-b', 'from-white', 'to-blue-200');
                 container.appendChild(span);
                 letters.push(span);
             });
-            const repulsionStrength = 25; 
-            const repulsionRadius = 75;  
+            const repulsionStrength = 30; 
+            const repulsionRadius = 100;  
             document.addEventListener('mousemove', (e) => {
                 letters.forEach(span => {
                     const rect = span.getBoundingClientRect();
@@ -203,14 +215,12 @@
             const types = ['❄️', '🧊'];
             particle.textContent = types[Math.floor(Math.random() * types.length)];
             
-            const size = Math.random() * 1 + 0.8; 
-            // Made faster: duration reduced from 15-25s to 6-12s
-            const duration = Math.random() * 6 + 6; 
+            const size = Math.random() * 1 + 1.2; 
+            const duration = Math.random() * 5 + 5; 
             
             particle.style.left = Math.random() * 100 + 'vw';
             particle.style.fontSize = `${size}rem`;
             
-            // Animation is linear for consistent speed
             particle.style.animation = `fall ${duration}s linear forwards`;
             
             if (isInitial) {
@@ -226,12 +236,10 @@
         }
 
         function initIceFall() {
-            // Initial burst
-            for (let i = 0; i < 30; i++) {
+            for (let i = 0; i < 20; i++) {
                 createIceParticle(true);
             }
-            // Steady flow - increased frequency slightly for faster feel
-            setInterval(() => createIceParticle(false), 500);
+            setInterval(() => createIceParticle(false), 600);
         }
 
         window.onload = function () { 
