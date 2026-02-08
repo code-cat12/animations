@@ -3,134 +3,241 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>❄️</text></svg>">
-    <title>Icy Animations Gallery</title>
+    <title>Icy Animations</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>❄️</text></svg>">
+    
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', '"Helvetica Neue"', 'Arial', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
     <style>
-        body { 
-            font-family: "Inter", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-            background-image: url('https://64.media.tumblr.com/d4b62ada31d7ca6031325908e4ffb175/6c038ee946b7aa17-36/s2048x3072/45d199da966eb93c8e44103db277b7f68b267556.gif');
-            background-size: cover;
-            background-position: center;
+        html, body {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+        .tri-gradient {
+            background: linear-gradient(to right, 
+                #ef4444 0%,
+                #60a5fa 50%,
+                #a78bfa 100%
+            );
             background-attachment: fixed;
+            background-size: cover;
         }
 
-        /* Glassmorphism Effect */
-        .glass-card {
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 1.5rem;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        #kinetic-welcome span {
+            display: inline-block;
+            transition: transform 0.15s ease-out;
+            will-change: transform;
         }
 
-        .glass-header {
-            background: rgba(255, 255, 255, 0.75);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+        /* Falling animation */
+        @keyframes fall {
+            0% { 
+                transform: translateY(-10vh); 
+                opacity: 0; 
+            }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { 
+                transform: translateY(110vh); 
+                opacity: 0; 
+            }
+        }
+
+        .ice-particle {
+            position: fixed;
+            top: 0;
+            pointer-events: none;
+            user-select: none;
+            z-index: 5;
+            will-change: transform;
+            filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.4));
+        }
+
+        @keyframes pulse-light {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7); }
+            50% { box-shadow: 0 0 0 8px rgba(255, 255, 255, 0); }
+        }
+        .pulse-badge {
+            animation: pulse-light 2s infinite;
         }
     </style>
 </head>
-<body class="min-h-screen font-sans">
-    
-    <div class="container mx-auto p-4 sm:p-8 lg:p-12">
+<body class="tri-gradient flex flex-col min-h-screen font-sans">
 
-        <!-- Header Section -->
-        <header class="text-center mb-10 py-8 glass-header rounded-2xl shadow-2xl">
-            <h1 class="text-4xl sm:text-5xl font-extrabold text-blue-800 tracking-tight">
-                Icy Animations
-            </h1>
-            <p class="mt-2 text-xl text-blue-900/80 font-medium">
-                Explore our collection of high-energy action and comedy animation shorts!
-            </p>
-        </header>
+    <!-- MAIN CONTENT WRAPPER -->
+    <div id="main-content-wrapper" class="flex flex-col min-h-screen w-full relative">
 
-        <!-- Video Grid -->
-        <main class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-
-            <!-- Video 1 -->
-            <div class="glass-card p-5 transition hover:scale-[1.02] duration-300">
-                <h2 class="text-xl font-bold mb-4 text-white drop-shadow-md">01. Backrooms Jumpstyle</h2>
-                <div style="position: relative; padding-bottom: 56.25%; height: 0;" class="rounded-xl overflow-hidden shadow-inner">
-                    <iframe src="https://jumpshare.com/embed/WeWshCzkWUEdqaU3VfGZ" 
-                            frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen 
-                            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;">
-                    </iframe>
-                </div>
-            </div>
-
-            <!-- Video 2 -->
-            <div class="glass-card p-5 transition hover:scale-[1.02] duration-300">
-                <h2 class="text-xl font-bold mb-4 text-white drop-shadow-md">02. Strategy</h2>
-                <div style="position: relative; padding-bottom: 56.25%; height: 0;" class="rounded-xl overflow-hidden shadow-inner">
-                    <iframe src="https://jumpshare.com/embed/BvVhvELnNPGa8zjUxocK" 
-                            frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen 
-                            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;">
-                    </iframe>
-                </div>
-            </div>
-
-            <!-- Video 3 -->
-            <div class="glass-card p-5 transition hover:scale-[1.02] duration-300">
-                <h2 class="text-xl font-bold mb-4 text-white drop-shadow-md">03. All My Fellas (NEW!)</h2>
-                <div style="position: relative; padding-bottom: 56.25%; height: 0;" class="rounded-xl overflow-hidden shadow-inner">
-                    <iframe src="https://jumpshare.com/embed/2laDeKMNbUdFiVox1dDU" 
-                            frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen 
-                            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;">
-                    </iframe>
-                </div>
-            </div>
-
-            <!-- Video 4 -->
-            <div class="glass-card p-5 transition hover:scale-[1.02] duration-300">
-                <h2 class="text-xl font-bold mb-4 text-white drop-shadow-md">04. Nonchalant Catch</h2>
-                <div style="position: relative; padding-bottom: 56.25%; height: 0;" class="rounded-xl overflow-hidden shadow-inner">
-                    <iframe src="https://jumpshare.com/embed/MEePcT9Rh53uw9QZr8PB" 
-                            frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen 
-                            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;">
-                    </iframe>
-                </div>
-            </div>
+        <!-- MAIN CONTENT -->
+        <main class="flex-grow flex flex-col items-center justify-center px-4 py-12 z-20">
             
-            <!-- Video 5 -->
-            <div class="glass-card p-5 transition hover:scale-[1.02] duration-300">
-                <h2 class="text-xl font-bold mb-4 text-white drop-shadow-md">05. This Is Your Liver</h2>
-                <div style="position: relative; padding-bottom: 56.25%; height: 0;" class="rounded-xl overflow-hidden shadow-inner">
-                    <iframe src="https://jumpshare.com/embed/7b6YJiGJ6FhqKmPLK6xp" 
-                            frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen 
-                            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;">
-                    </iframe>
-                </div>
+            <div class="text-center w-full mb-8">
+                <h1 id="kinetic-welcome" class="text-3xl sm:text-5xl font-extrabold text-white leading-tight tracking-tight drop-shadow-lg">
+                    <!-- Letters injected by JS -->
+                </h1>
             </div>
 
-            <!-- Video 6 -->
-            <div class="glass-card p-5 transition hover:scale-[1.02] duration-300">
-                <h2 class="text-xl font-bold mb-4 text-white drop-shadow-md">06. Raging</h2>
-                <div style="position: relative; padding-bottom: 56.25%; height: 0;" class="rounded-xl overflow-hidden shadow-inner">
-                    <iframe src="https://jumpshare.com/embed/sbbtc60mvD1CuokmFBHf" 
-                            frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen 
-                            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;">
-                    </iframe>
-                </div>
+            <!-- CONTAINER FOR CARDS -->
+            <div class="flex flex-col lg:flex-row items-stretch justify-center gap-8 lg:gap-12 max-w-6xl w-full mb-8">
+                
+                <!-- Icy Animations Card -->
+                <a href="https://code-cat12.github.io/animations/icy/" class="flex-1 flex flex-col transform hover:scale-[1.03] transition duration-300 ease-in-out 
+                    bg-gradient-to-tr from-blue-500 to-purple-700 rounded-xl overflow-hidden shadow-2xl 
+                    hover:shadow-blue-900/70 group border border-white/30
+                    focus:ring-4 focus:ring-white/50 focus:outline-none relative">
+                    
+                    <span class="absolute top-2 right-2 px-3 py-1 text-xs font-bold uppercase rounded-full bg-white text-blue-600 shadow-md z-20 pulse-badge">
+                        Update!
+                    </span>
+
+                    <img src="https://i.postimg.cc/Fzm43475/no-Filter.png" 
+                        alt="Icy Animations Banner"
+                        class="w-full h-48 sm:h-64 object-cover bg-gray-900 group-hover:opacity-85 transition duration-300"
+                        onerror="this.onerror=null;this.src='https://placehold.co/768x432/4c2f6d/60a5fa?text=Icy+Animations+Load+Failed';">
+
+                    <div class="p-3 text-center h-24 flex flex-col justify-center flex-grow">
+                        <p class="text-white text-xl font-bold tracking-wide drop-shadow-lg mb-0.5">
+                            Icy Animations
+                        </p>
+                        <p class="text-gray-300 text-xs font-light leading-tight">
+                            View seamless, chilling effects and unique character movements made by Icy himself.
+                        </p>
+                    </div>
+                </a>
+
+                <!-- Anime Animations Card -->
+                <a href="https://code-cat12.github.io/animations/anime" class="flex-1 flex flex-col relative
+                    transform hover:scale-[1.03] transition duration-300 ease-in-out
+                    bg-gradient-to-tr from-teal-500 to-yellow-500 rounded-xl overflow-hidden shadow-2xl
+                    hover:shadow-yellow-700/70 group border border-white/30
+                    focus:ring-4 focus:ring-white/50 focus:outline-none">
+                    
+                    <span class="absolute top-2 right-2 px-3 py-1 text-xs font-bold uppercase rounded-full bg-white text-teal-500 shadow-md pulse-badge z-20">
+                        Special Edition
+                    </span>
+
+                    <img src="https://pbs.twimg.com/media/G5ozTKLacAIhB-m?format=jpg&name=large"
+                        alt="Anime Animations Banner"
+                        class="w-full h-48 sm:h-64 object-cover bg-gray-900 group-hover:opacity-85 transition duration-300"
+                        onerror="this.onerror=null;this.src='https://placehold.co/768x432/333366/00cec9?text=Anime+Animations+Load+Failed';">
+                    
+                    <div class="p-3 text-center h-24 flex flex-col justify-center flex-grow">
+                        <p class="text-white text-xl font-bold tracking-wide mb-0.5">
+                            Anime Animations
+                        </p>
+                        <p class="text-white text-xs font-light leading-tight">
+                            Cinematic anime-inspired sequences featuring exclusive high-octane visual effects.
+                        </p>
+                    </div>
+                </a>
             </div>
             
         </main>
-
-        <!-- Footer -->
-        <footer class="text-center pt-8 border-t border-white/20">
-            <p class="text-white font-medium text-sm drop-shadow-md">
-                Credits: 
-                <span class="opacity-90">@bestie_, @lana_yt,</span>
-                <a href="https://www.youtube.com/@VanilBean/" target="_blank" class="underline decoration-blue-300 hover:text-blue-200">@vanilbean</a>,
-                <a href="https://www.youtube.com/@hhazem" target="_blank" class="underline decoration-blue-300 hover:text-blue-200">@haz3mn</a>,
-                <a href="https://www.youtube.com/@Kyle_YT" target="_blank" class="underline decoration-blue-300 hover:text-blue-200">@kyle_yt</a>
-                <span class="block mt-2 opacity-75">| All rights reserved.</span>
-            </p>
+        
+        <footer class="w-full py-6 text-center mt-auto flex flex-col items-center gap-2 z-20">
+            <div class="flex items-center space-x-4">
+                <a href="https://github.com/code-cat12/animations/releases" 
+                   class="text-white hover:text-gray-300 transition duration-200 text-xs font-medium opacity-80 hover:opacity-100 tracking-wider">
+                    Releases
+                </a>
+                <span class="text-white/40 text-xs">•</span>
+                <span class="text-white text-xs font-medium opacity-50 tracking-widest uppercase">
+                    v1.1.01
+                </span>
+            </div>
         </footer>
+    </div> 
 
-    </div>
+    <script>
+        function initKineticWelcome() {
+            const container = document.getElementById('kinetic-welcome');
+            if (!container) return;
+            const text = "Welcome"; 
+            const letters = [];
+            text.split('').forEach(char => {
+                const span = document.createElement('span');
+                span.textContent = char === ' ' ? '\u00A0' : char; 
+                span.classList.add('bg-clip-text', 'text-transparent', 'bg-gradient-to-r', 'from-red-300', 'to-green-300');
+                container.appendChild(span);
+                letters.push(span);
+            });
+            const repulsionStrength = 25; 
+            const repulsionRadius = 75;  
+            document.addEventListener('mousemove', (e) => {
+                letters.forEach(span => {
+                    const rect = span.getBoundingClientRect();
+                    const letterX = rect.left + rect.width / 2;
+                    const letterY = rect.top + rect.height / 2;
+                    const dx = e.clientX - letterX;
+                    const dy = e.clientY - letterY;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    let translateY = 0;
+                    if (distance < repulsionRadius) {
+                        const repulsionFactor = 1 - (distance / repulsionRadius);
+                        const direction = dy > 0 ? -1 : 1;
+                        translateY = direction * repulsionStrength * repulsionFactor;
+                    }
+                    span.style.transform = `translateY(${translateY}px)`;
+                });
+            });
+        }
 
+        function createIceParticle(isInitial = false) {
+            const particle = document.createElement('div');
+            particle.className = 'ice-particle';
+            
+            const types = ['❄️', '🧊'];
+            particle.textContent = types[Math.floor(Math.random() * types.length)];
+            
+            const size = Math.random() * 1 + 0.8; 
+            // Made faster: duration reduced from 15-25s to 6-12s
+            const duration = Math.random() * 6 + 6; 
+            
+            particle.style.left = Math.random() * 100 + 'vw';
+            particle.style.fontSize = `${size}rem`;
+            
+            // Animation is linear for consistent speed
+            particle.style.animation = `fall ${duration}s linear forwards`;
+            
+            if (isInitial) {
+                const offset = Math.random() * -duration;
+                particle.style.animationDelay = `${offset}s`;
+            }
+
+            document.body.appendChild(particle);
+
+            setTimeout(() => {
+                particle.remove();
+            }, duration * 1000);
+        }
+
+        function initIceFall() {
+            // Initial burst
+            for (let i = 0; i < 30; i++) {
+                createIceParticle(true);
+            }
+            // Steady flow - increased frequency slightly for faster feel
+            setInterval(() => createIceParticle(false), 500);
+        }
+
+        window.onload = function () { 
+            initKineticWelcome();
+            initIceFall();
+        };
+    </script>
 </body>
 </html>
