@@ -12,80 +12,83 @@
     <style>
         body {
             font-family: "Inter", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
-            /* Anime Background */
-            background: url('https://media3.giphy.com/media/ouYdqNNhIveCI/giphy.gif') no-repeat center center fixed;
-            background-size: cover;
+            background-color: #1c0a05; /* Fallback solid color */
+            margin: 0;
+            padding: 0;
             min-height: 100vh;
         }
 
-        /* Overlay to ensure content is readable - Shifted to a warmer dark tone */
+        /* GIF Background Layer */
+        .gif-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://media3.giphy.com/media/ouYdqNNhIveCI/giphy.gif');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            z-index: -2;
+        }
+
+        /* Overlay Layer (Adjusted opacity to let GIF show through better) */
         .bg-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(28, 10, 5, 0.75); /* Deep Warm Slate overlay */
+            background: rgba(15, 5, 2, 0.6); /* Slightly more transparent */
             z-index: -1;
         }
 
         /* Video Card styling with a Red/Orange neon aesthetic */
         .video-card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 100, 0, 0.2);
+            background: rgba(255, 255, 255, 0.07);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(251, 146, 60, 0.3);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .video-card:hover {
             transform: translateY(-8px);
-            background: rgba(255, 60, 0, 0.1);
-            border-color: #fb923c; /* Orange-400 */
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 0 20px rgba(239, 68, 68, 0.4);
+            background: rgba(255, 60, 0, 0.15);
+            border-color: #fb923c; 
+            box-shadow: 0 0 25px rgba(239, 68, 68, 0.5);
         }
 
         .video-embed-container {
             position: relative; 
-            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            padding-bottom: 56.25%; 
             height: 0;
-            background-color: #450a0a; /* Deep Red background for loading */
+            background-color: #2e0808; 
             border-radius: 0.5rem;
             overflow: hidden;
         }
         
-        /* Custom scrollbar - Red/Orange theme */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #1c0a05;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #ea580c; /* Orange-600 */
-            border-radius: 10px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #f97316; /* Orange-500 */
-        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #1c0a05; }
+        ::-webkit-scrollbar-thumb { background: #ea580c; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #f97316; }
     </style>
 </head>
 <body class="relative text-white antialiased">
 
+    <!-- Explicit background layers -->
+    <div class="gif-background"></div>
     <div class="bg-overlay"></div>
 
-    <!-- Scroll Progress Bar (Red/Orange themed) -->
+    <!-- Scroll Progress Bar -->
     <div id="scroll-progress" 
          class="fixed top-0 left-0 h-1 bg-gradient-to-r from-red-600 to-orange-500 shadow-[0_0_10px_#f97316] z-[100] transition-all duration-75">
     </div>
     
-    <!-- Sticky Back to Top (Red/Orange themed) -->
+    <!-- Sticky Back to Top -->
     <button id="sticky-cta" 
-            class="fixed bottom-8 right-8 z-50 
-                   px-6 py-3 bg-red-600 text-white font-bold
-                   rounded-full shadow-2xl hover:bg-orange-600 
-                   transition-all duration-300 transform hover:scale-110 active:scale-95 
-                   opacity-0 pointer-events-none flex items-center space-x-2 border border-orange-400/30">
+            class="fixed bottom-8 right-8 z-50 px-6 py-3 bg-red-600 text-white font-bold rounded-full shadow-2xl hover:bg-orange-600 transition-all duration-300 transform hover:scale-110 active:scale-95 opacity-0 pointer-events-none flex items-center space-x-2 border border-orange-400/30">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5">
             <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 15.75 7.5-7.5 7.5 7.5" />
         </svg>
@@ -95,7 +98,7 @@
     <div class="container mx-auto p-4 sm:p-8 lg:p-12">
 
         <!-- Header Section -->
-        <header id="main-header" class="text-center mb-12 py-12 bg-white/5 backdrop-blur-md rounded-3xl border border-orange-500/20 shadow-2xl">
+        <header id="main-header" class="text-center mb-12 py-12 bg-black/30 backdrop-blur-md rounded-3xl border border-orange-500/20 shadow-2xl">
             <h1 class="text-5xl sm:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-orange-500 to-yellow-500 tracking-tight">
                 Anime Animations
             </h1>
@@ -106,62 +109,48 @@
 
         <!-- Video Grid -->
         <main class="grid grid-cols-1 md:grid-cols-2 gap-8">
-
-            <!-- Video 1 -->
             <div class="video-card p-6 rounded-2xl">
                 <h2 class="text-xl font-semibold mb-4 text-orange-400">01. Metro Man</h2>
                 <div class="video-embed-container">
                     <iframe src="https://jumpshare.com/embed/8xx1bj647OVj90RYVVbX" frameborder="0" allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe>
                 </div>
             </div>
-
-            <!-- Video 2 -->
             <div class="video-card p-6 rounded-2xl">
                 <h2 class="text-xl font-semibold mb-4 text-orange-400">02. Retry Now (Chorus)</h2>
                 <div class="video-embed-container">
                     <iframe src="https://jumpshare.com/embed/xgsz7TzRoOY4NvcrmMVd" frameborder="0" allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe>
                 </div>
             </div>
-
-            <!-- Video 3 -->
             <div class="video-card p-6 rounded-2xl">
                 <h2 class="text-xl font-semibold mb-4 text-orange-400">03. Retry Now (Ending)</h2>
                 <div class="video-embed-container">
                     <iframe src="https://jumpshare.com/embed/N6GTo8tp9vwLYLpS1IkO" frameborder="0" allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe>
                 </div>
             </div>
-            
-            <!-- Video 4 -->
             <div class="video-card p-6 rounded-2xl">
                 <h2 class="text-xl font-semibold mb-4 text-orange-400">04. Static</h2>
                 <div class="video-embed-container">
                     <iframe src="https://jumpshare.com/embed/wONCLGgOBU6J7VVxVpZv" frameborder="0" allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe>
                 </div>
             </div>
-
-            <!-- Video 5 -->
             <div class="video-card p-6 rounded-2xl">
                 <h2 class="text-xl font-semibold mb-4 text-orange-400">05. Shucks</h2>
                 <div class="video-embed-container">
                     <iframe src="https://jumpshare.com/embed/0Zgc0UvZTEoXBlxqOji7" frameborder="0" allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe>
                 </div>
             </div>
-
-            <!-- Video 6 -->
             <div class="video-card p-6 rounded-2xl">
                 <h2 class="text-xl font-semibold mb-4 text-orange-400">06. Silly Billy</h2>
                 <div class="video-embed-container">
                     <iframe src="https://jumpshare.com/embed/9DltR8deuUGH8SJveVn5" frameborder="0" allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe>
                 </div>
             </div>
-            
         </main>
 
         <!-- Footer -->
         <footer class="text-center mt-20 py-8 border-t border-orange-500/10">
             <p class="text-orange-500/50 text-sm font-medium tracking-widest uppercase">&copy; 2025 Icy Studios</p>
         </footer>
-
     </div>
 
     <script>
@@ -169,7 +158,6 @@
             const header = document.getElementById('main-header');
             const stickyCta = document.getElementById('sticky-cta');
             
-            // Sticky CTA Logic
             if (header && stickyCta) {
                 const observer = new IntersectionObserver((entries) => {
                     entries.forEach(entry => {
@@ -182,14 +170,12 @@
                         }
                     });
                 }, { threshold: 0 });
-
                 observer.observe(header);
                 stickyCta.addEventListener('click', () => {
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                 });
             }
 
-            // Scroll Progress
             window.addEventListener('scroll', () => {
                 const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
                 const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
