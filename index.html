@@ -16,6 +16,10 @@
                     fontFamily: {
                         sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', '"Helvetica Neue"', 'Arial', 'sans-serif'],
                     },
+                    colors: {
+                        icyblue: '#0055ff', 
+                        animeorange: '#ff8c00',
+                    }
                 }
             }
         }
@@ -29,21 +33,23 @@
             overflow-x: hidden;
         }
         
-        /* Updated background with the requested GIF */
-        .gif-background {
-            background: url('https://i.redd.it/4n3saz2c3nib1.gif') no-repeat center center fixed;
-            background-size: cover;
+        /* Updated background with 130% zoom to hide margins/watermarks */
+        .page-background {
+            background: url('https://media.licdn.com/dms/image/v2/D4E22AQHgbAtlNG5liw/feedshare-shrink_2048_1536/feedshare-shrink_2048_1536/0/1713975534166?e=2147483647&v=beta&t=pMTrPYA0trXCn9gmWGx6l1RIsuXBdmeEyqNQkoc76PM') no-repeat;
+            background-position: center 45%; 
+            background-size: 130% auto; 
+            background-attachment: fixed;
+            background-color: #0c0c0c;
             position: relative;
         }
 
-        /* Overlay to ensure text remains legible */
         .background-overlay {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.2); /* Subtle dark tint */
+            background: transparent; 
             pointer-events: none;
             z-index: 1;
         }
@@ -54,7 +60,6 @@
             will-change: transform;
         }
 
-        /* Falling animation */
         @keyframes fall {
             0% { 
                 transform: translateY(-10vh); 
@@ -75,7 +80,7 @@
             user-select: none;
             z-index: 5;
             will-change: transform;
-            filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.6));
+            filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.8));
         }
 
         @keyframes pulse-light {
@@ -87,17 +92,16 @@
         }
     </style>
 </head>
-<body class="gif-background flex flex-col min-h-screen font-sans">
+<body class="page-background flex flex-col min-h-screen font-sans">
     <div class="background-overlay"></div>
 
-    <!-- MAIN CONTENT WRAPPER -->
     <div id="main-content-wrapper" class="flex flex-col min-h-screen w-full relative z-10">
 
         <!-- MAIN CONTENT -->
         <main class="flex-grow flex flex-col items-center justify-center px-4 py-12">
             
             <div class="text-center w-full mb-10">
-                <h1 id="kinetic-welcome" class="text-4xl sm:text-6xl font-extrabold text-white leading-tight tracking-tight drop-shadow-[0_5px_15px_rgba(0,0,0,0.5)]">
+                <h1 id="kinetic-welcome" class="text-4xl sm:text-6xl font-extrabold text-white leading-tight tracking-tight drop-shadow-[0_4px_10px_rgba(0,0,0,0.9)]">
                     <!-- Letters injected by JS -->
                 </h1>
             </div>
@@ -105,52 +109,52 @@
             <!-- CONTAINER FOR CARDS -->
             <div class="flex flex-col lg:flex-row items-stretch justify-center gap-8 lg:gap-12 max-w-6xl w-full mb-8">
                 
-                <!-- Icy Animations Card -->
-                <a href="https://code-cat12.github.io/animations/icy/" class="flex-1 flex flex-col transform hover:scale-[1.03] transition duration-300 ease-in-out 
-                    bg-gradient-to-tr from-blue-600/90 to-purple-800/90 backdrop-blur-sm rounded-xl overflow-hidden shadow-2xl 
-                    hover:shadow-blue-500/50 group border border-white/20
+                <!-- Icy Animations Card (Vibrant Dark Blue) -->
+                <a href="https://code-cat12.github.io/animations/icy/v2/" class="flex-1 flex flex-col transform hover:scale-[1.03] transition duration-300 ease-in-out 
+                    bg-icyblue rounded-xl overflow-hidden shadow-2xl 
+                    hover:shadow-blue-600/60 group border-2 border-white/50
                     focus:ring-4 focus:ring-white/50 focus:outline-none relative">
                     
-                    <span class="absolute top-2 right-2 px-3 py-1 text-xs font-bold uppercase rounded-full bg-white text-blue-600 shadow-md z-20 pulse-badge">
+                    <span class="absolute top-2 right-2 px-3 py-1 text-xs font-bold uppercase rounded-full bg-white text-blue-700 shadow-md z-20 pulse-badge">
                         Update!
                     </span>
 
                     <img src="https://i.postimg.cc/Fzm43475/no-Filter.png" 
                         alt="Icy Animations Banner"
-                        class="w-full h-48 sm:h-64 object-cover bg-gray-900 group-hover:opacity-85 transition duration-300"
-                        onerror="this.onerror=null;this.src='https://placehold.co/768x432/4c2f6d/60a5fa?text=Icy+Animations+Load+Failed';">
+                        class="w-full h-48 sm:h-64 object-cover bg-gray-900 group-hover:opacity-90 transition duration-300"
+                        onerror="this.onerror=null;this.src='https://placehold.co/768x432/0055ff/333?text=Icy+Animations';">
 
                     <div class="p-4 text-center h-28 flex flex-col justify-center flex-grow">
-                        <p class="text-white text-2xl font-bold tracking-wide drop-shadow-md mb-1">
+                        <p class="text-white text-2xl font-bold tracking-wide mb-1 drop-shadow-sm">
                             Icy Animations
                         </p>
-                        <p class="text-blue-100 text-sm font-medium leading-tight opacity-90">
+                        <p class="text-blue-50 text-sm font-medium leading-tight">
                             View seamless, chilling effects and unique character movements made by Icy himself.
                         </p>
                     </div>
                 </a>
 
-                <!-- Anime Animations Card -->
-                <a href="https://code-cat12.github.io/animations/anime" class="flex-1 flex flex-col relative
+                <!-- Anime Animations Card (Bright Orange) -->
+                <a href="https://code-cat12.github.io/animations/winter" class="flex-1 flex flex-col relative
                     transform hover:scale-[1.03] transition duration-300 ease-in-out
-                    bg-gradient-to-tr from-teal-600/90 to-emerald-800/90 backdrop-blur-sm rounded-xl overflow-hidden shadow-2xl
-                    hover:shadow-teal-500/50 group border border-white/20
+                    bg-animeorange rounded-xl overflow-hidden shadow-2xl
+                    hover:shadow-orange-400/60 group border-2 border-white/50
                     focus:ring-4 focus:ring-white/50 focus:outline-none">
                     
-                    <span class="absolute top-2 right-2 px-3 py-1 text-xs font-bold uppercase rounded-full bg-white text-teal-600 shadow-md pulse-badge z-20">
+                    <span class="absolute top-2 right-2 px-3 py-1 text-xs font-bold uppercase rounded-full bg-white text-orange-600 shadow-md pulse-badge z-20">
                         Special Edition
                     </span>
 
-                    <img src="https://pbs.twimg.com/media/G5ozTKLacAIhB-m?format=jpg&name=large"
+                    <img src="https://static.beebom.com/wp-content/uploads/2025/01/Haikyuu-Legends-Roblox-banner.jpg?w=1024"
                         alt="Anime Animations Banner"
-                        class="w-full h-48 sm:h-64 object-cover bg-gray-900 group-hover:opacity-85 transition duration-300"
-                        onerror="this.onerror=null;this.src='https://placehold.co/768x432/333366/00cec9?text=Anime+Animations+Load+Failed';">
+                        class="w-full h-48 sm:h-64 object-cover bg-gray-900 group-hover:opacity-90 transition duration-300"
+                        onerror="this.onerror=null;this.src='https://placehold.co/768x432/ff8c00/fff?text=Anime+Animations';">
                     
                     <div class="p-4 text-center h-28 flex flex-col justify-center flex-grow">
-                        <p class="text-white text-2xl font-bold tracking-wide drop-shadow-md mb-1">
+                        <p class="text-white text-2xl font-bold tracking-wide mb-1 drop-shadow-sm">
                             Anime Animations
                         </p>
-                        <p class="text-teal-50 text-sm font-medium leading-tight opacity-90">
+                        <p class="text-orange-50 text-sm font-medium leading-tight">
                             Cinematic anime-inspired sequences featuring exclusive high-octane visual effects.
                         </p>
                     </div>
@@ -182,8 +186,7 @@
             text.split('').forEach(char => {
                 const span = document.createElement('span');
                 span.textContent = char === ' ' ? '\u00A0' : char; 
-                // Increased contrast for the welcome text
-                span.classList.add('bg-clip-text', 'text-transparent', 'bg-gradient-to-b', 'from-white', 'to-blue-200');
+                span.classList.add('bg-clip-text', 'text-transparent', 'bg-gradient-to-b', 'from-white', 'to-blue-100');
                 container.appendChild(span);
                 letters.push(span);
             });
@@ -215,8 +218,8 @@
             const types = ['❄️', '🧊'];
             particle.textContent = types[Math.floor(Math.random() * types.length)];
             
-            const size = Math.random() * 1 + 1.2; 
-            const duration = Math.random() * 5 + 5; 
+            const size = Math.random() * 0.8 + 1.2; 
+            const duration = Math.random() * 4 + 4; 
             
             particle.style.left = Math.random() * 100 + 'vw';
             particle.style.fontSize = `${size}rem`;
@@ -239,7 +242,7 @@
             for (let i = 0; i < 20; i++) {
                 createIceParticle(true);
             }
-            setInterval(() => createIceParticle(false), 600);
+            setInterval(() => createIceParticle(false), 500);
         }
 
         window.onload = function () { 
@@ -249,3 +252,4 @@
     </script>
 </body>
 </html>
+
